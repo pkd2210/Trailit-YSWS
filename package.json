@@ -23,6 +23,7 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
+		"airtable": "^0.12.2",
 		"dotenv": "^17.2.3"
 	}
 }
