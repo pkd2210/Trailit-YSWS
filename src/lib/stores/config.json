@@ -5,5 +5,6 @@
     "background-color": "#fbf0dc",
     "ysws-description": "A demo shop for testing purposes.",
     "hca-client-id": "5c51dec3143836674f74778aa5f14724",
-    "url-base": "http://localhost:5173"
+    "url-base": "http://localhost:5173",
+    "tokens-symbol": "🪙"
 }

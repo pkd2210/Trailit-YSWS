@@ -10,13 +10,13 @@ export async function GET({ params }) {
     const records = await base(process.env.ITEMS_TABLE_ID!).select().all();
 
     if (records.length === 0) {
-        return json({ error: 'Item not found' }, { status: 404 });
+        return json([]);
     }
 
-    const item = {
-        id: records[0].id,
-        ...records[0].fields
-    };
+    const items = records.map(record => ({
+        id: record.id,
+        ...record.fields
+    }));
 
-    return json(item);
+    return json(items);
 };
