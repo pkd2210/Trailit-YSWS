@@ -57,4 +57,14 @@
 		color: var(--theme-color);
 		font-weight: bold;
 	}
+	:global(.login-button) {
+		background-color: var(--theme-color);
+		color: white;
+		border: none;
+		padding: 0.75rem 1.5rem;
+		font-size: 1rem;
+		border-radius: 0.375rem;
+		cursor: pointer;
+		transition: background-color 0.3s ease;
+	}
 </style>
