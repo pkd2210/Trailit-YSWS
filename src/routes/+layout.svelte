@@ -16,6 +16,7 @@
 				{#if data.isAdmin}
 				<a href="{config['url-base']}/admin">Admin</a>
 				{/if}
+				<span>| {config['tokens-symbol']}: <span class="font-bold">{data.userTokens}</span></span>
 			</div>
 		</div>
 	{/if}
