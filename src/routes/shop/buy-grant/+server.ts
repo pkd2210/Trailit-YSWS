@@ -2,7 +2,7 @@ import Airtable from 'airtable';
 
 export async function POST({ request}) {
     const body = await request.json();
-    const { item, data } = body;
+    const { item, data, amount } = body;
 
     if (!data.userRecordId) {
         return new Response(JSON.stringify({ success: false, message: 'User record ID not found.' }), {
@@ -43,8 +43,9 @@ export async function POST({ request}) {
                     SlackID: [data.userRecordId],
                     ItemID: [itemRecord.id],
                     Price: item.price,
-                    OrderDate: new Date().toISOString(),
+                    grantAmount: amount,
                     itemName: item.name,
+                    OrderDate: new Date().toISOString(),
                     Status: 'Pending'
                 }
             }
