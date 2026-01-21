@@ -25,15 +25,29 @@ export async function GET({ cookies }) {
         return json([]);
     }
 
+    // Get the user's record ID from the users table
+    const userRecord = await base(process.env.USERS_TABLE_ID!).select({
+        filterByFormula: `{SlackID} = '${userSlackId}'`
+    }).firstPage();
+
+    if (userRecord.length === 0) {
+        return json([]);
+    }
+
+    const userRecordId = userRecord[0].id;
+
     const records = await base(process.env.ORDERS_TABLE_ID!).select().all();
 
     if (records.length === 0) {
         return json([]);
     }
 
-    // Only take orders where SlackID matches the current user
+    // Only take orders where SlackID (linked record) matches the current user's record ID
     const orders = records
-        .filter(record => record.fields.SlackID === userSlackId)
+        .filter(record => {
+            const slackIdField = record.fields.SlackID;
+            return Array.isArray(slackIdField) && slackIdField.includes(userRecordId);
+        })
         .map(record => ({
             id: record.id,
             ...record.fields
