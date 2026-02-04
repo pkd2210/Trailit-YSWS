@@ -58,8 +58,8 @@
 <div class="card" style="border-color: {config['secondary-theme-color']}; background-color: {config['background-color']};">
     <h2 style="color: {config['theme-color']};">{item.name}</h2>
     <div class="content">
-        <p>{item.description || 'No description available'}</p>
-        <p style="font-weight: bold;">Price: {config['tokens-symbol']}{item.price}{#if item.type == "grant"} Per Dollar{/if}</p>
+        <p style="color: {config['secondary-theme-color']};">{item.description || 'No description available'}</p>
+        <p style="font-weight: bold; color: {config['secondary-theme-color']};">Price: {config['tokens-symbol']}{item.price}{#if item.type == "grant"} Per Dollar{/if}</p>
     </div>
     <div class="actions">
         {#if item.type == "grant"}
