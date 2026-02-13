@@ -1,4 +1,5 @@
 import Airtable from 'airtable';
+import { sendLetter, sendOrder } from '$lib/components/autofulfill.server.ts';
 
 export async function POST({ request}) {
     const body = await request.json();
@@ -57,6 +58,43 @@ export async function POST({ request}) {
                 }
             }
         ]);
+
+        // Handle letter fulfillment if this is a letter item
+        if (item.type === 'letter' && data.letterData) {
+                const letterResult = await sendLetter({
+                    first_name: "To add",
+                    last_name: "To add",
+                    address_line_1: "To add",
+                    address_line_2: "To add",
+                    city: "To add",
+                    state: "To add",
+                    postal_code: "To add",
+                    country: "To add",
+                    recipient_email: "To add",
+                    mail_type: "To add",
+                    weight_grams: "To add",
+                    rubber_stamps: "To add",
+                    notes: "To add"
+                });
+        }
+
+        // Handle order fulfillment if this is an order item
+        if (item.type === 'package' && data.orderData) {
+                const orderResult = await sendOrder({
+                    order_text: "To add",
+                    first_name: "To add",
+                    last_name: "To add",
+                    email: "To add",
+                    phone_number: "To add",
+                    address_line_1: "To add",
+                    address_line_2: "To add",
+                    city: "To add",
+                    state: "To add",
+                    postal_code: "To add",
+                    country: "To add",
+                    order_notes: "To add"
+                });
+        }
 
     } catch (error) {
         console.error('Error creating order:', error);
