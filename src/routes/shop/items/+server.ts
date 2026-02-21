@@ -16,7 +16,13 @@ export async function GET({ params }) {
     const items = records.map(record => ({
         id: record.id,
         ...record.fields
-    }));
+    })).sort((a, b) => {
+        const aId = String(a.id);
+        const bId = String(b.id);
+        
+        // Natural sort comparison to handle numbers correctly
+        return aId.localeCompare(bId, undefined, { numeric: true, sensitivity: 'base' });
+    });
 
     return json(items);
 };
