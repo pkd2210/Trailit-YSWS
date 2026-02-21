@@ -56,27 +56,34 @@
     }
 </script>
 <div class="card" style="border-color: {config['secondary-theme-color']}; background-color: {config['background-color']};">
-    <h2 style="color: {config['theme-color']};">{item.name}</h2>
-    <div class="content">
-        <p style="color: {config['secondary-theme-color']};">{item.description || 'No description available'}</p>
-        <p style="font-weight: bold; color: {config['secondary-theme-color']};">Price: {config['tokens-symbol']}{item.price}{#if item.type == "grant"} Per Dollar{/if}</p>
-    </div>
-    <div class="actions">
-        {#if item.type == "grant"}
-            <button on:click={() => handleBuyGrant(item, data)} style="background-color: {config['theme-color']}; color: {config['background-color']}; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
-                Get Grant
-            </button>
-        {:else}
-            {#if item.price <= data.userTokens}
-            <button  on:click={() => handleBuy(item, data)} style="background-color: {config['theme-color']}; color: {config['background-color']}; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
-                Buy Now
-            </button>
+    {#if item.image}
+        <div class="image-container">
+            <img src={item.image} alt={item.name} class="item-image" />
+        </div>
+    {/if}
+    <div class="card-body">
+        <h2 style="color: {config['theme-color']};">{item.name}</h2>
+        <div class="content">
+            <p style="color: {config['secondary-theme-color']};">{item.description || 'No description available'}</p>
+            <p style="font-weight: bold; color: {config['secondary-theme-color']};">Price: {config['tokens-symbol']}{item.price}{#if item.type == "grant"} Per Dollar{/if}</p>
+        </div>
+        <div class="actions">
+            {#if item.type == "grant"}
+                <button on:click={() => handleBuyGrant(item, data)} style="background-color: {config['theme-color']}; color: {config['background-color']}; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
+                    Get Grant
+                </button>
             {:else}
-            <button disabled style="background-color: grey; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: not-allowed;">
-                Insufficient Funds, missing {config['tokens-symbol']}{item.price - data.userTokens}
-            </button>
+                {#if item.price <= data.userTokens}
+                <button  on:click={() => handleBuy(item, data)} style="background-color: {config['theme-color']}; color: {config['background-color']}; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
+                    Buy Now
+                </button>
+                {:else}
+                <button disabled style="background-color: grey; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: not-allowed;">
+                    Insufficient Funds, missing {config['tokens-symbol']}{item.price - data.userTokens}
+                </button>
+                {/if}
             {/if}
-        {/if}
+        </div>
     </div>
 </div>
 <style>
@@ -84,13 +91,13 @@
         border: 2px solid;
         width: clamp(280px, 25vw, 350px);
         border-radius: 12px;
-        padding: 1.5rem;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         transition: all 0.3s ease;
         display: flex;
         flex-direction: column;
-        min-height: 250px;
+        min-height: 350px;
         position: relative;
+        overflow: hidden;
     }
     
     .card:hover {
@@ -98,7 +105,34 @@
         box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
     }
     
-    .card h2 {
+    .image-container {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        border-radius: 10px 10px 0 0;
+        position: relative;
+    }
+    
+    .item-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transition: transform 0.3s ease;
+    }
+    
+    .card:hover .item-image {
+        transform: scale(1.05);
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .card-body h2 {
         margin: 0 0 1rem 0;
         font-size: 1.25rem;
         font-weight: 600;
@@ -106,7 +140,7 @@
     }
     
     .content {
-        margin: 1rem 0 1.5rem 0;
+        margin: 0 0 1.5rem 0;
         flex-grow: 1;
     }
     
