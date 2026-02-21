@@ -67,6 +67,7 @@
             <p style="color: {config['secondary-theme-color']};">{item.description || 'No description available'}</p>
             <p style="font-weight: bold; color: {config['secondary-theme-color']};">Price: {config['tokens-symbol']}{item.price}{#if item.type == "grant"} Per Dollar{/if}</p>
         </div>
+        {#if data.user}
         <div class="actions">
             {#if item.type == "grant"}
                 <button on:click={() => handleBuyGrant(item, data)} style="background-color: {config['theme-color']}; color: {config['background-color']}; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
@@ -84,6 +85,7 @@
                 {/if}
             {/if}
         </div>
+        {/if}
     </div>
 </div>
 <style>
