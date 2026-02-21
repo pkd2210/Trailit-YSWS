@@ -38,14 +38,21 @@ export async function POST({ request}) {
         
         const itemRecord = itemRecords[0];
         
+        if (itemRecord.fields.price !== item.price) {
+            return new Response(JSON.stringify({ success: false, message: 'Item price mismatch.' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
         await base(process.env.ORDERS_TABLE_ID!).create([
             {
                 fields: {
                     SlackID: [data.userRecordId],
                     ItemID: [itemRecord.id],
-                    Price: item.price,
+                    Price: itemRecord.fields.price,
                     OrderDate: new Date().toISOString(),
-                    itemName: item.name,
+                    itemName: itemRecord.fields.name,
                     Status: 'Pending'
                 }
             }
