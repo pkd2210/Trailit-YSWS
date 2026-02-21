@@ -3,7 +3,7 @@ import { sendLetter, sendOrder } from '$lib/components/autofulfill.server.ts';
 
 export async function POST({ request}) {
     const body = await request.json();
-    const { requestItem, data } = body;
+    const { item, data } = body;
 
     if (!data.userRecordId) {
         return new Response(JSON.stringify({ success: false, message: 'User record ID not found.' }), {
@@ -16,42 +16,51 @@ export async function POST({ request}) {
         const base = new Airtable({apiKey: process.env.AIRTABLE_ACCESS_TOKEN}).base(process.env.BASE_ID!);
 
         const userRecord = await base(process.env.USERS_TABLE_ID!).find(data.userRecordId);
-        const item = await base(process.env.ITEMS_TABLE_ID!).find(requestItem.id);
         const actualUserTokens = userRecord.fields.Tokens as number;
-        const itemPrice = item.fields.price as number;
 
-        if (actualUserTokens < itemPrice) {
+        if (actualUserTokens < item.price) {
             return new Response(JSON.stringify({ success: false, message: 'Insufficient tokens.' }), {
                 status: 402,
                 headers: { 'Content-Type': 'application/json' }
             });
         }
 
-
-        await base(process.env.USERS_TABLE_ID!).update([
-            {
-                id: data.userRecordId,
-                fields: {
-                    Tokens: actualUserTokens - itemPrice
-                }
-            }
-        ]);
-
+        const itemRecords = await base(process.env.ITEMS_TABLE_ID!).select({
+            filterByFormula: `{ID} = ${item.id}`
+        }).firstPage();
+        
+        if (itemRecords.length === 0) {
+            return new Response(JSON.stringify({ success: false, message: 'Item not found.' }), {
+                status: 404,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+        
+        const itemRecord = itemRecords[0];
+        
         await base(process.env.ORDERS_TABLE_ID!).create([
             {
                 fields: {
                     SlackID: [data.userRecordId],
-                    ItemID: [item.id],
-                    Price: itemPrice,
+                    ItemID: [itemRecord.id],
+                    Price: item.price,
                     OrderDate: new Date().toISOString(),
-                    itemName: item.fields.name,
+                    itemName: item.name,
                     Status: 'Pending'
+                }
+            }
+        ]);
+        await base(process.env.USERS_TABLE_ID!).update([
+            {
+                id: data.userRecordId,
+                fields: {
+                    Tokens: actualUserTokens - item.price
                 }
             }
         ]);
 
         // Handle letter fulfillment if this is a letter item
-        if (item.fields.type === 'letter' && data.letterData) {
+        if (item.type === 'letter' && data.letterData) {
                 const letterResult = await sendLetter({
                     first_name: "To add",
                     last_name: "To add",
@@ -70,7 +79,7 @@ export async function POST({ request}) {
         }
 
         // Handle order fulfillment if this is an order item
-        if (item.fields.type === 'package' && data.orderData) {
+        if (item.type === 'package' && data.orderData) {
                 const orderResult = await sendOrder({
                     order_text: "To add",
                     first_name: "To add",
