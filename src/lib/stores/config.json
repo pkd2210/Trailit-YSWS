@@ -1,8 +1,8 @@
 {
     "ysws-name": "Trailit",
-    "theme-color": "#f59e0b",
-    "secondary-theme-color": "#ff9900",
-    "background-color": "#fbf0dc",
+    "theme-color": "#ec3750",
+    "secondary-theme-color": "#ec3750",
+    "background-color": "#17171D",
     "ysws-description": "YS: Web-app And produce a trailer / showcase video for you project WS: Filming, editing, and recording equipment",
     "hca-client-id": "3aeb2b41074f77c27e1ced4ff5c8f075",
     "url-base": "https://trailit.peleg2210.me",
