@@ -90,4 +90,37 @@
 		cursor: pointer;
 		transition: background-color 0.3s ease;
 	}
+
+	:global(.hero-svg) {
+		height: 500px;
+		width: 500px;
+		max-width: 90vw;
+		max-height: 90vw;
+	}
+
+	@media (max-width: 768px) {
+		:global(.hero-svg) {
+			height: 300px;
+			width: 300px;
+		}
+		
+		:global(.title) {
+			font-size: 2rem;
+		}
+		
+		:global(.subtitle) {
+			font-size: 1rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		:global(.hero-svg) {
+			height: 200px;
+			width: 200px;
+		}
+		
+		:global(.title) {
+			font-size: 1.5rem;
+		}
+	}
 </style>
