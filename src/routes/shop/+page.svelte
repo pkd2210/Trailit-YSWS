@@ -24,7 +24,29 @@
             <a href="{config['url-base']}/shop/projects" class="px-4 py-2 bg-[var(--theme-color)] text-[var(--background-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow">Projects</a>
         </div>
     </section>
+    
+    <section class="cards-container">
+        {#each items as item}
+            <Card {item} {data} />
+        {/each}
+    </section>
 </div>
-{#each items as item}
-    <Card {item} {data} />
-{/each}
+
+<style>
+    .cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        padding: 2rem 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .title {
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: center;
+        margin: 1rem 0;
+    }
+</style>

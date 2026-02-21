@@ -82,15 +82,73 @@
 <style>
     .card {
         border: 2px solid;
-        border-radius: 0.5rem;
-        padding: 1rem;
-        margin: 1rem 0;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: clamp(280px, 25vw, 350px);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        min-height: 250px;
+        position: relative;
     }
+    
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card h2 {
+        margin: 0 0 1rem 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+    
     .content {
-        margin: 1rem 0;
+        margin: 1rem 0 1.5rem 0;
+        flex-grow: 1;
     }
+    
+    .content p {
+        margin: 0.5rem 0;
+        line-height: 1.5;
+    }
+    
+    .content p:first-child {
+        font-size: 0.95rem;
+        opacity: 0.9;
+    }
+    
+    .content p:last-child {
+        font-size: 1.1rem;
+        margin-top: 1rem;
+    }
+    
     .actions {
-        text-align: right;
+        text-align: center;
+        margin-top: auto;
+        flex-shrink: 0;
+    }
+    
+    .actions button {
+        width: 100%;
+        padding: 0.75rem 1.5rem !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .actions button:not(:disabled):hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .actions button:disabled {
+        opacity: 0.7;
+        transform: none !important;
     }
 </style>
