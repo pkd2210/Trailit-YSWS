@@ -31,7 +31,10 @@ export const GET = async ({ url, cookies }) => {
     
     cookies.set('hca_access_token', data.access_token, { 
         path: '/', 
-        expires: new Date(Date.now() + data.expires_in * 1000)
+        expires: new Date(Date.now() + data.expires_in * 1000),
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict'
     });
 
     throw redirect(303, config["url-base"] + "/shop");
