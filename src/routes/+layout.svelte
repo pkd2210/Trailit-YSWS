@@ -63,11 +63,12 @@
 	}
 	
 	:global(.title) {
-		font-size: 3rem;
+		font-size: 3.5rem;
 		font-weight: bold;
 		color: var(--theme-color);
 		margin-bottom: 1rem;
 		text-align: center;
+		font-family: "Phantom Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 	}
 	
 	:global(.subtitle) {
