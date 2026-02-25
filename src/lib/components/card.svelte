@@ -27,7 +27,7 @@
     async function handleBuyGrant(item, data) {
         const grantAmount = document.createElement('div');
         grantAmount.innerHTML = `
-            <label for="grant-amount">Enter the amount of dollars you need on your grant (exp, 10$ = ${item.price}${config['tokens-symbol']} * 10$ = ${item.price * 10}${config['tokens-symbol']}): </label>
+            <label for="grant-amount">Enter the amount of dollars you need on your grant (exp, 10$ = ${item.price || 0}${config['tokens-symbol']} * 10$ = ${(item.price || 0) * 10}${config['tokens-symbol']}): </label>
             <input type="number" id="grant-amount" name="grant-amount" min="1" required />
         `;
         const userInput = prompt('Enter Grant amount ($):', '1');
@@ -65,7 +65,7 @@
         <h2 style="color: {config['theme-color']};">{item.name}</h2>
         <div class="content">
             <p style="color: {config['secondary-theme-color']};">{item.description || 'No description available'}</p>
-            <p style="font-weight: bold; color: {config['secondary-theme-color']};">Price: {config['tokens-symbol']}{item.price}{#if item.type == "grant"} Per Dollar{/if}</p>
+            <p style="font-weight: bold; color: {config['secondary-theme-color']};">Price: {config['tokens-symbol']}{item.price ? item.price.toLocaleString() : '0'}{#if item.type == "grant"} Per Dollar{/if}</p>
         </div>
         {#if data.user}
         <div class="actions">
@@ -74,7 +74,7 @@
                     Get Grant
                 </button>
             {:else}
-                {#if item.price <= data.userTokens}
+                {#if item.price<= data.userTokens}
                 <button  on:click={() => handleBuy(item, data)} style="background-color: {config['theme-color']}; color: {config['background-color']}; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
                     Buy Now
                 </button>

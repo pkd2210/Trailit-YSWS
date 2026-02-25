@@ -20,7 +20,7 @@
 				<a href="{config['url-base']}/admin">Admin</a>
 				{/if}
 				{#if data.user}
-				<span>| {config['tokens-symbol']}: <span class="font-bold">{data.userTokens}</span></span>
+				<span>| {config['tokens-symbol']}: <span class="font-bold">{data.userTokens ? data.userTokens.toLocaleString() : '0'}</span></span>
 				{/if}
 			</div>
 		</div>
