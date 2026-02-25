@@ -17,11 +17,28 @@ export async function GET({ params }) {
         id: record.id,
         ...record.fields
     })).sort((a, b) => {
-        const aId = String(a.id);
-        const bId = String(b.id);
-        
+        // sory by id
+        //const aId = String(a.id);
+        //const bId = String(b.id);
+
         // Natural sort comparison to handle numbers correctly
-        return aId.localeCompare(bId, undefined, { numeric: true, sensitivity: 'base' });
+        //return aId.localeCompare(bId, undefined, { numeric: true, sensitivity: 'base' });
+
+        
+        // sort by price
+        const aPrice = Number(a.price) || 0;
+        const bPrice = Number(b.price) || 0;
+        
+        // Items with no price go to the end
+        const aHasPrice = a.price != null && !isNaN(Number(a.price)) && Number(a.price) > 0;
+        const bHasPrice = b.price != null && !isNaN(Number(b.price)) && Number(b.price) > 0;
+        
+        if (aHasPrice && !bHasPrice) return -1;
+        if (!aHasPrice && bHasPrice) return 1;
+        if (!aHasPrice && !bHasPrice) return 0;
+        
+        // Sort by price in ascending order
+        return aPrice - bPrice;
     });
 
     return json(items);
