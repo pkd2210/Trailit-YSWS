@@ -152,7 +152,7 @@
     }
     
     .value {
-        color: #333;
+        color: #ec3750;
         font-size: 0.95rem;
         text-align: right;
         flex: 1;
