@@ -4,7 +4,14 @@
     export let item;
     export let data;
 
+    function confirmPurchase(item) {
+        return confirm(`Are you sure you want to purchase ${item.name} for ${config['tokens-symbol']}${item.price ? item.price.toLocaleString() : '0'}?`);
+    }
+
     async function handleBuy(item, data) {
+        if (!confirmPurchase(item)) {
+            return;
+        }
             try {
                 const response = await fetch('/shop/buy', {
                     method: 'POST',
