@@ -12,6 +12,7 @@ export const load = async ({ parent, url }) => {
         user: data.user,
         userTokens: data.userTokens,
         userRecordId: data.userRecordId,
-        isAdmin: data.isAdmin
+        isAdmin: data.isAdmin,
+        filloutPasskey: process.env.FILLOUT_PASSKEY
     };
 }

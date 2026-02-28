@@ -15,6 +15,7 @@ export async function GET({ params }) {
 
     const items = records.map(record => ({
         id: record.id,
+        recordId: record.id,
         ...record.fields
     })).sort((a, b) => {
         // sory by id

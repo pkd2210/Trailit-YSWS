@@ -76,21 +76,32 @@
         </div>
         {#if data.user}
         <div class="actions">
-            {#if item.type == "grant"}
-                <button on:click={() => handleBuyGrant(item, data)} style="background-color: {config['theme-color']}; color: {config['background-color']}; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
-                    Get Grant
-                </button>
-            {:else}
-                {#if item.price<= data.userTokens}
-                <button  on:click={() => handleBuy(item, data)} style="background-color: {config['theme-color']}; color: {config['background-color']}; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
-                    Buy Now
-                </button>
+            <div class="action-row">
+                {#if item.type == "grant"}
+                    <button on:click={() => handleBuyGrant(item, data)} style="background-color: {config['theme-color']}; color: {config['background-color']}; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
+                        Get Grant
+                    </button>
                 {:else}
-                <button disabled style="background-color: grey; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: not-allowed;">
-                    Insufficient Funds, missing {config['tokens-symbol']}{item.price - data.userTokens}
-                </button>
+                    {#if item.price<= data.userTokens}
+                    <button  on:click={() => handleBuy(item, data)} style="background-color: {config['theme-color']}; color: {config['background-color']}; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
+                        Buy Now
+                    </button>
+                    {:else}
+                    <button disabled style="background-color: grey; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: not-allowed;">
+                        Insufficient Funds, missing {config['tokens-symbol']}{item.price - data.userTokens}
+                    </button>
+                    {/if}
                 {/if}
-            {/if}
+                {#if data.isAdmin}
+                    <a href="https://dog-match.fillout.com/t/tMmMMisQ5yus?passkey={data.filloutPasskey}&id={item.recordId}" target="_blank" class="settings-link" style="color: {config['theme-color']};">
+                        <svg fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" xmlns="http://www.w3.org/2000/svg" aria-label="settings" viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet" fill="currentColor" width="24" height="24" title="settings">
+                            <g>
+                                <path d="M9.752,9.489l2.302,0.705c0.552,-0.373 1.161,-0.669 1.81,-0.873l0.885,-2.239c0.397,-0.054 0.803,-0.082 1.216,-0.082c0.413,0 0.819,0.028 1.217,0.082l0.884,2.239c0.649,0.204 1.258,0.5 1.81,0.873l2.302,-0.705c0.588,0.56 1.1,1.2 1.519,1.901l-1.2,2.088c0.238,0.616 0.391,1.274 0.446,1.959l1.987,1.361c-0.073,0.828 -0.257,1.624 -0.539,2.372l-2.383,0.364c-0.341,0.583 -0.764,1.111 -1.253,1.57l0.176,2.403c-0.673,0.446 -1.408,0.804 -2.191,1.057l-1.77,-1.636c-0.328,0.048 -0.664,0.072 -1.005,0.072c-0.341,0 -0.676,-0.024 -1.005,-0.072l-1.77,1.636c-0.782,-0.253 -1.518,-0.611 -2.19,-1.057l0.175,-2.403c-0.489,-0.459 -0.912,-0.987 -1.253,-1.57l-2.383,-0.364c-0.281,-0.748 -0.466,-1.544 -0.539,-2.372l1.987,-1.361c0.055,-0.685 0.208,-1.343 0.446,-1.959l-1.199,-2.088c0.419,-0.701 0.93,-1.341 1.518,-1.901Zm6.213,10.511c2.209,0 4,-1.791 4,-4c0,-2.209 -1.791,-4 -4,-4c-2.209,0 -4,1.791 -4,4c0,2.209 1.791,4 4,4Z"></path>
+                            </g>
+                        </svg>
+                    </a>
+                {/if}
+            </div>
         </div>
         {/if}
     </div>
@@ -174,8 +185,15 @@
         flex-shrink: 0;
     }
     
+    .action-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        justify-content: center;
+    }
+    
     .actions button {
-        width: 100%;
+        flex: 1;
         padding: 0.75rem 1.5rem !important;
         border-radius: 8px !important;
         font-weight: 600 !important;
@@ -183,6 +201,23 @@
         transition: all 0.2s ease;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+    }
+    
+    .settings-link {
+        color: inherit;
+        opacity: 0.7;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        border-radius: 4px;
+    }
+    
+    .settings-link:hover {
+        opacity: 1;
+        background-color: rgba(0, 0, 0, 0.05);
+        transform: scale(1.1);
     }
     
     .actions button:not(:disabled):hover {
