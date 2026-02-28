@@ -9,6 +9,28 @@
     <div class="title">Welcome to {config["ysws-name"]}'s Shop</div>
     <p class="subtitle">{config["ysws-description"]}</p>
     <!--End of the editing section-->
+    <button class="slack-button"><a href="https://hackclub.enterprise.slack.com/archives/C0AGG8J6PLL" target="_blank">#trailit-ysws</a></button>
+    <style>
+        .slack-button {
+            top: 20px;
+            background-color: #ab2739;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .slack-button a {
+            color: white;
+            text-decoration: none;
+        }
+        .slack-button:hover {
+            background-color: #801f2c;
+        }
+        </style>
+    <!--End of the editing section-->
+    <br>
     {#if data.user}
         <a href="{config['url-base']}/shop"><button class="login-button">Go to Shop</button></a>
     {:else}
