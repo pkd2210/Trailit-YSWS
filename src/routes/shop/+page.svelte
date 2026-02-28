@@ -45,6 +45,7 @@
             <a href="?category=storage" class="px-4 py-2 bg-transparent text-[var(--theme-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow border stroke-[var(--theme-color)]">Storage</a>
             <a href="?category=accessories" class="px-4 py-2 bg-transparent text-[var(--theme-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow border stroke-[var(--theme-color)]">Accessories</a>
             <a href="?category=streaming" class="px-4 py-2 bg-transparent text-[var(--theme-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow border stroke-[var(--theme-color)]">Streaming</a>
+            <a href="?category=other" class="px-4 py-2 bg-transparent text-[var(--theme-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow border stroke-[var(--theme-color)]">Other</a>
         </div>
     </section>
     <section class="cards-container">
