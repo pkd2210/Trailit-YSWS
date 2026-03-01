@@ -28,7 +28,34 @@
     }
 
     function getRewardAmount() {
-        return quest.fields['Token Amount'] || 0;
+        if (quest.fields['Quest reward'] === 'Tokens') {
+            return quest.fields['Token Amount'] || 0;
+        }
+        return 0;
+    }
+
+    function getRewardType() {
+        return quest.fields['Quest reward'] || 'Unknown';
+    }
+
+    function getPrizeNames() {
+        return quest.fields['name (from Prize)'] || [];
+    }
+
+    function getRewardDisplay() {
+        const rewardType = getRewardType();
+        if (rewardType === 'Tokens') {
+            return `${getRewardAmount()} Tokens`;
+        } else if (rewardType === 'Order') {
+            const prizes = getPrizeNames();
+            if (prizes.length === 1) {
+                return prizes[0];
+            } else if (prizes.length > 1) {
+                return `${prizes.length} Items`;
+            }
+            return 'Prize Bundle';
+        }
+        return 'Unknown Reward';
     }
 
     let isRedeeming = false;
@@ -45,7 +72,9 @@
                 },
                 body: JSON.stringify({
                     questId: quest.id,
-                    tokenAmount: getRewardAmount()
+                    rewardType: getRewardType(),
+                    tokenAmount: getRewardAmount(),
+                    prizeIds: quest.fields['Prize'] || []
                 })
             });
 
@@ -89,7 +118,7 @@
         <h2 style="color: {config['theme-color']};">{quest.fields.Name}</h2>
         <div class="quest-info">
             <span class="reward-amount" style="color: {config['theme-color']};">
-                {getRewardAmount()} Tokens
+                {getRewardDisplay()}
             </span>
             <span class="status {getStatusClass(getQuestStatus())}">
                 {#if getQuestStatus() === 'not-completed'}
@@ -109,8 +138,16 @@
         {#if quest.fields.Description}
             <p style="color: {config['secondary-theme-color']};" class="description">{quest.fields.Description}</p>
         {/if}
-        
-    </div>
+                {#if getRewardType() === 'Order' && getPrizeNames().length > 0}
+            <div class="prize-list">
+                <h4 style="color: {config['theme-color']}; margin: 0.5rem 0;">Rewards:</h4>
+                <ul style="color: {config['secondary-theme-color']}; margin: 0; padding-left: 1.5rem;">
+                    {#each getPrizeNames() as prizeName}
+                        <li>{prizeName}</li>
+                    {/each}
+                </ul>
+            </div>
+        {/if}    </div>
     
     <div class="actions">
         {#if getQuestStatus() === 'completed-not-redeemed'}
@@ -122,8 +159,10 @@
                 disabled={isRedeeming}>
                 {#if isRedeeming}
                     Redeeming...
-                {:else}
+                {:else if getRewardType() === 'Tokens'}
                     Redeem {getRewardAmount()} Tokens
+                {:else}
+                    Redeem Prizes
                 {/if}
             </button>
         {:else if getQuestStatus() === 'completed-redeemed'}
@@ -290,5 +329,27 @@
         cursor: not-allowed;
         opacity: 0.6;
         transform: none !important;
+    }
+
+    .prize-list {
+        margin-top: 1rem;
+        padding: 0.75rem;
+        border-radius: 0.375rem;
+        background: rgba(var(--theme-color-rgb, 236, 55, 80), 0.05);
+        border: 1px solid rgba(var(--theme-color-rgb, 236, 55, 80), 0.1);
+    }
+
+    .prize-list h4 {
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .prize-list ul {
+        font-size: 0.875rem;
+        line-height: 1.4;
+    }
+
+    .prize-list li {
+        margin-bottom: 0.25rem;
     }
 </style>

@@ -9,7 +9,7 @@ const questsBase = new Airtable({ apiKey: process.env.AIRTABLE_ACCESS_TOKEN }).b
 
 export async function POST({ request, cookies }) {
     try {
-        const { questId, tokenAmount } = await request.json();
+        const { questId, rewardType, tokenAmount, prizeIds } = await request.json();
         
         const access_token = cookies.get('hca_access_token');
         
@@ -63,13 +63,40 @@ export async function POST({ request, cookies }) {
         }
         const currentTokens = userRecord.fields['Tokens'] || 0;
 
-        // Update user's tokens
-        await base(process.env.USERS_TABLE_ID!).update([{
-            id: userRecord.id,
-            fields: {
-                'Tokens': currentTokens + tokenAmount
-            }
-        }]);
+        // Handle different reward types
+        if (rewardType === 'Tokens') {
+            // Update user's tokens
+            await base(process.env.USERS_TABLE_ID!).update([{
+                id: userRecord.id,
+                fields: {
+                    'Tokens': currentTokens + tokenAmount
+                }
+            }]);
+            
+            var newTokenBalance = currentTokens + tokenAmount;
+        } else if (rewardType === 'Order' && prizeIds && prizeIds.length > 0) {
+            // Create orders for each prize item
+            const questName = quest.fields['Name'] || `Quest ${quest.id}`;
+            const orderPromises = prizeIds.map(async (prizeId: string, index: number) => {
+                const prizeName = quest.fields['name (from Prize)']?.[index] || 'Quest Prize';
+                return base(process.env.ORDERS_TABLE_ID!).create([{
+                    fields: {
+                        SlackID: [userRecord.id],
+                        ItemID: [prizeId],
+                        Price: 0, // Free quest reward
+                        OrderDate: new Date().toISOString(),
+                        itemName: prizeName,
+                        Status: 'Pending',
+                        Notes: `Quest reward from: ${questName}`
+                    }
+                }]);
+            });
+            
+            await Promise.all(orderPromises);
+            var newTokenBalance = currentTokens; // No token change for prize rewards
+        } else {
+            return json({ error: 'Invalid reward type' }, { status: 400 });
+        }
 
         // Add user to redeemed list - add user record to the "Users Redeemed" linked field
         const currentUsersRedeemed = quest.fields['Users Redeemed'] || [];
@@ -82,7 +109,7 @@ export async function POST({ request, cookies }) {
             }
         }]);
 
-        return json({ success: true, newTokenBalance: currentTokens + tokenAmount });
+        return json({ success: true, newTokenBalance: newTokenBalance, rewardType: rewardType });
     } catch (error) {
         console.error('Error in /api/quests/redeem:', error);
         return json({ error: 'Internal server error' }, { status: 500 });
