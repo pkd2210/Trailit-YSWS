@@ -15,6 +15,9 @@
 				{/if}
 				<a href="{config['url-base']}">Home</a>
 				<a href="{config['url-base']}/shop">Shop</a>
+				{#if data.user}
+				<a href="{config['url-base']}/quests">Quests</a>
+				{/if}
 				{#if data.isAdmin}
 				<a href="{config['url-base']}/admin">Admin</a>
 				{/if}
