@@ -36,6 +36,12 @@ export async function POST({ request, cookies }) {
             return json({ error: 'Quest not found' }, { status: 404 });
         }
 
+        // Check if quest is active
+        const questStatus = quest.fields['Status'];
+        if (questStatus !== 'Active') {
+            return json({ error: `Quest is ${questStatus?.toLowerCase() || 'not available'}` }, { status: 400 });
+        }
+
         const completedUsers = quest.fields['Users Completed ID'] || [];
         if (!completedUsers.includes(userSlackId)) {
             return json({ error: 'Quest not completed by user' }, { status: 400 });

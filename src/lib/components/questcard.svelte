@@ -98,6 +98,12 @@
     function getQuestStatus() {
         const completed = isQuestCompleted();
         const redeemed = isQuestRedeemed();
+        const questStatus = quest.fields['Status'];
+        
+        // Check if quest is available first
+        if (questStatus !== 'Active') {
+            return questStatus?.toLowerCase() || 'inactive';
+        }
         
         if (!completed) return 'not-completed';
         if (completed && !redeemed) return 'completed-not-redeemed';
@@ -109,6 +115,8 @@
         if (status === 'not-completed') return 'status-not-completed';
         if (status === 'completed-not-redeemed') return 'status-completed';
         if (status === 'completed-redeemed') return 'status-redeemed';
+        if (status === 'not started') return 'status-not-started';
+        if (status === 'ended') return 'status-ended';
         return 'status-unknown';
     }
 </script>
@@ -127,8 +135,12 @@
                     Completed
                 {:else if getQuestStatus() === 'completed-redeemed'}
                     Redeemed
+                {:else if getQuestStatus() === 'not started'}
+                    Coming Soon
+                {:else if getQuestStatus() === 'ended'}
+                    Ended
                 {:else}
-                    Unknown
+                    {quest.fields['Status'] || 'Unknown'}
                 {/if}
             </span>
         </div>
@@ -178,6 +190,20 @@
                 style="background-color: #e0e0e0; color: #6c757d;" 
                 disabled>
                 Not Completed Yet
+            </button>
+        {:else if getQuestStatus() === 'not started'}
+            <button 
+                class="redeem-btn disabled" 
+                style="background-color: #e0e0e0; color: #6c757d;" 
+                disabled>
+                Coming Soon
+            </button>
+        {:else if getQuestStatus() === 'ended'}
+            <button 
+                class="redeem-btn disabled" 
+                style="background-color: #e0e0e0; color: #6c757d;" 
+                disabled>
+                Quest Ended
             </button>
         {/if}
     </div>
@@ -245,6 +271,16 @@
     .status-redeemed {
         background: #d4edda;
         color: #155724;
+    }
+
+    .status-not-started {
+        background: #e2e3e5;
+        color: #383d41;
+    }
+
+    .status-ended {
+        background: #f8d7da;
+        color: #721c24;
     }
 
     .status-pending {
