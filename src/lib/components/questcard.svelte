@@ -240,6 +240,9 @@
         margin: 1rem 0;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         transition: box-shadow 0.2s;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-wrap: break-word;
     }
     
     .quest-card:hover {
@@ -253,12 +256,17 @@
         margin-bottom: 1rem;
         padding-bottom: 1rem;
         border-bottom: 1px solid var(--secondary-theme-color, #e0e0e0);
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
 
     .quest-header h2 {
         margin: 0;
         font-size: 1.25rem;
         flex: 1;
+        min-width: 0;
+        overflow-wrap: break-word;
+        word-break: break-word;
     }
 
     .quest-info {
@@ -271,6 +279,9 @@
     .reward-amount {
         font-size: 0.9rem;
         font-weight: 600;
+        text-align: right;
+        overflow-wrap: break-word;
+        word-break: break-word;
     }
 
     .status {
@@ -410,5 +421,38 @@
 
     .prize-list li {
         margin-bottom: 0.25rem;
+    }
+    
+    @media (max-width: 768px) {
+        .quest-header {
+            flex-direction: column;
+            align-items: stretch;
+            text-align: center;
+        }
+        
+        .quest-header h2 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .quest-info {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .reward-amount {
+            text-align: left;
+            font-size: 0.85rem;
+        }
+        
+        .actions {
+            text-align: center;
+        }
+        
+        .redeem-btn {
+            width: 100%;
+            max-width: 300px;
+        }
     }
 </style>

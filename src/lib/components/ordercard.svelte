@@ -62,6 +62,9 @@
         margin: 1rem 0;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         transition: box-shadow 0.2s;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-wrap: break-word;
     }
     
     .order-card:hover {
@@ -75,11 +78,17 @@
         margin-bottom: 1rem;
         padding-bottom: 1rem;
         border-bottom: 1px solid var(--secondary-theme-color, #e0e0e0);
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
 
     .order-header h2 {
         margin: 0;
         font-size: 1.25rem;
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: break-word;
+        word-break: break-word;
     }
 
     .status {
@@ -124,19 +133,52 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        min-height: 1.5rem;
     }
     
     .label {
         color: #6c757d;
         font-size: 0.9rem;
         font-weight: 500;
+        flex-shrink: 0;
+        margin-right: 1rem;
     }
     
     .value {
         color: #ec3750;
         font-size: 0.95rem;
         text-align: right;
-        flex: 1;
-        margin-left: 1rem;
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+    
+    @media (max-width: 768px) {
+        .order-header {
+            flex-direction: column;
+            align-items: stretch;
+            text-align: center;
+        }
+        
+        .order-header h2 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .detail-row {
+            flex-direction: column;
+            align-items: stretch;
+            text-align: left;
+            gap: 0.25rem;
+        }
+        
+        .label {
+            margin-right: 0;
+            font-weight: 600;
+        }
+        
+        .value {
+            text-align: left;
+            font-size: 0.9rem;
+        }
     }
 </style>

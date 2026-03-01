@@ -76,6 +76,9 @@
         margin: 1rem 0;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         transition: box-shadow 0.2s;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-wrap: break-word;
     }
     
     .project-card:hover {
@@ -89,11 +92,17 @@
         margin-bottom: 1rem;
         padding-bottom: 1rem;
         border-bottom: 1px solid var(--secondary-theme-color, #e0e0e0);
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
 
     .project-header h2 {
         margin: 0;
         font-size: 1.25rem;
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: break-word;
+        word-break: break-word;
     }
 
     .status {
@@ -164,5 +173,29 @@
         margin-top: 1rem;
         padding-top: 1rem;
         border-top: 1px solid var(--secondary-theme-color, #e0e0e0);
+    }
+    
+    @media (max-width: 768px) {
+        .project-header {
+            flex-direction: column;
+            align-items: stretch;
+            text-align: center;
+        }
+        
+        .project-header h2 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .actions {
+            text-align: center;
+        }
+        
+        .actions a {
+            display: inline-block;
+            margin: 0.25rem;
+            width: auto;
+            min-width: 120px;
+        }
     }
 </style>
