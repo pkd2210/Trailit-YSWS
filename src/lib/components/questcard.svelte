@@ -56,7 +56,7 @@
         const parts = [];
         
         if (hasTokenReward()) {
-            parts.push(`${getRewardAmount()} Tokens`);
+            parts.push(`${getRewardAmount()} ${config['tokens-symbol']}`);
         }
         
         if (hasPrizeReward()) {
@@ -193,7 +193,7 @@
                 {:else if hasTokenReward() && hasPrizeReward()}
                     Redeem Rewards
                 {:else if hasTokenReward()}
-                    Redeem {getRewardAmount()} Tokens
+                    Redeem {getRewardAmount()} {config['tokens-symbol']}
                 {:else if hasPrizeReward()}
                     Redeem Prizes
                 {:else}
