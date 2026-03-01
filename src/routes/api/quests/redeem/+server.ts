@@ -9,7 +9,7 @@ const questsBase = new Airtable({ apiKey: process.env.AIRTABLE_ACCESS_TOKEN }).b
 
 export async function POST({ request, cookies }) {
     try {
-        const { questId, rewardType, tokenAmount, prizeIds } = await request.json();
+        const { questId, rewardTypes, tokenAmount, prizeIds } = await request.json();
         
         const access_token = cookies.get('hca_access_token');
         
@@ -68,19 +68,24 @@ export async function POST({ request, cookies }) {
             return json({ error: 'Quest already redeemed' }, { status: 400 });
         }
         const currentTokens = userRecord.fields['Tokens'] || 0;
+        let newTokenBalance = currentTokens;
 
         // Handle different reward types
-        if (rewardType === 'Tokens') {
+        const hasTokenReward = rewardTypes?.includes('Tokens');
+        const hasPrizeReward = rewardTypes?.includes('Order');
+
+        if (hasTokenReward) {
             // Update user's tokens
+            newTokenBalance = currentTokens + tokenAmount;
             await base(process.env.USERS_TABLE_ID!).update([{
                 id: userRecord.id,
                 fields: {
-                    'Tokens': currentTokens + tokenAmount
+                    'Tokens': newTokenBalance
                 }
             }]);
-            
-            var newTokenBalance = currentTokens + tokenAmount;
-        } else if (rewardType === 'Order' && prizeIds && prizeIds.length > 0) {
+        }
+
+        if (hasPrizeReward && prizeIds && prizeIds.length > 0) {
             // Create orders for each prize item
             const questName = quest.fields['Name'] || `Quest ${quest.id}`;
             const orderPromises = prizeIds.map(async (prizeId: string, index: number) => {
@@ -99,9 +104,10 @@ export async function POST({ request, cookies }) {
             });
             
             await Promise.all(orderPromises);
-            var newTokenBalance = currentTokens; // No token change for prize rewards
-        } else {
-            return json({ error: 'Invalid reward type' }, { status: 400 });
+        }
+
+        if (!hasTokenReward && !hasPrizeReward) {
+            return json({ error: 'No valid rewards to redeem' }, { status: 400 });
         }
 
         // Add user to redeemed list - add user record to the "Users Redeemed" linked field
@@ -115,7 +121,13 @@ export async function POST({ request, cookies }) {
             }
         }]);
 
-        return json({ success: true, newTokenBalance: newTokenBalance, rewardType: rewardType });
+        return json({ 
+            success: true, 
+            newTokenBalance: newTokenBalance, 
+            rewardTypes: rewardTypes,
+            tokensRedeemed: hasTokenReward ? tokenAmount : 0,
+            prizesRedeemed: hasPrizeReward ? prizeIds?.length || 0 : 0
+        });
     } catch (error) {
         console.error('Error in /api/quests/redeem:', error);
         return json({ error: 'Internal server error' }, { status: 500 });

@@ -28,14 +28,23 @@
     }
 
     function getRewardAmount() {
-        if (quest.fields['Quest reward'] === 'Tokens') {
+        const rewardTypes = quest.fields['Quest reward'] || [];
+        if (rewardTypes.includes('Tokens')) {
             return quest.fields['Token Amount'] || 0;
         }
         return 0;
     }
 
-    function getRewardType() {
-        return quest.fields['Quest reward'] || 'Unknown';
+    function getRewardTypes() {
+        return quest.fields['Quest reward'] || [];
+    }
+
+    function hasTokenReward() {
+        return getRewardTypes().includes('Tokens');
+    }
+
+    function hasPrizeReward() {
+        return getRewardTypes().includes('Order');
     }
 
     function getPrizeNames() {
@@ -43,19 +52,29 @@
     }
 
     function getRewardDisplay() {
-        const rewardType = getRewardType();
-        if (rewardType === 'Tokens') {
-            return `${getRewardAmount()} Tokens`;
-        } else if (rewardType === 'Order') {
+        const rewardTypes = getRewardTypes();
+        const parts = [];
+        
+        if (hasTokenReward()) {
+            parts.push(`${getRewardAmount()} Tokens`);
+        }
+        
+        if (hasPrizeReward()) {
             const prizes = getPrizeNames();
             if (prizes.length === 1) {
-                return prizes[0];
+                parts.push(prizes[0]);
             } else if (prizes.length > 1) {
-                return `${prizes.length} Items`;
+                parts.push(`${prizes.length} Items`);
+            } else {
+                parts.push('Prize Bundle');
             }
-            return 'Prize Bundle';
         }
-        return 'Unknown Reward';
+        
+        if (parts.length === 0) {
+            return 'No Rewards';
+        }
+        
+        return parts.join(' + ');
     }
 
     let isRedeeming = false;
@@ -72,7 +91,7 @@
                 },
                 body: JSON.stringify({
                     questId: quest.id,
-                    rewardType: getRewardType(),
+                    rewardTypes: getRewardTypes(),
                     tokenAmount: getRewardAmount(),
                     prizeIds: quest.fields['Prize'] || []
                 })
@@ -147,12 +166,12 @@
     </div>
     
     <div class="content">
-        {#if quest.fields.Description}
+        {#if getRewardTypes().length > 0 && quest.fields.Description}
             <p style="color: {config['secondary-theme-color']};" class="description">{quest.fields.Description}</p>
         {/if}
-                {#if getRewardType() === 'Order' && getPrizeNames().length > 0}
+                {#if hasPrizeReward() && getPrizeNames().length > 0}
             <div class="prize-list">
-                <h4 style="color: {config['theme-color']}; margin: 0.5rem 0;">Rewards:</h4>
+                <h4 style="color: {config['theme-color']}; margin: 0.5rem 0;">Prizes:</h4>
                 <ul style="color: {config['secondary-theme-color']}; margin: 0; padding-left: 1.5rem;">
                     {#each getPrizeNames() as prizeName}
                         <li>{prizeName}</li>
@@ -171,10 +190,14 @@
                 disabled={isRedeeming}>
                 {#if isRedeeming}
                     Redeeming...
-                {:else if getRewardType() === 'Tokens'}
+                {:else if hasTokenReward() && hasPrizeReward()}
+                    Redeem Rewards
+                {:else if hasTokenReward()}
                     Redeem {getRewardAmount()} Tokens
-                {:else}
+                {:else if hasPrizeReward()}
                     Redeem Prizes
+                {:else}
+                    Redeem
                 {/if}
             </button>
         {:else if getQuestStatus() === 'completed-redeemed'}
