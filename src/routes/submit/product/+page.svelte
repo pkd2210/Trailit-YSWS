@@ -80,7 +80,7 @@
         {/if}
     </Field.Field>
     <Field.Field orientation="horizontal" class="justify-center space-x-2">
-        <Button variant="outline" type="submit">Submit</Button>
+        <Button variant="outline" type="submit">Next</Button>
         <Button variant="outline" type="button">Cancel</Button>
       </Field.Field>
     </Field.Group>
