@@ -45,7 +45,6 @@ export async function POST({ request}) {
                     ItemID: [itemRecord.id],
                     Price: itemPrice,
                     grantAmount: amount,
-                    itemName: item.name,
                     OrderDate: new Date().toISOString(),
                     Status: 'Pending'
                 }
