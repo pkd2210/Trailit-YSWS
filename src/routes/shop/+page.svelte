@@ -12,6 +12,7 @@
         return item.Category && Array.isArray(item.Category) && item.Category.includes(category);
     });
 
+    let selectedCategory = category;
 
     onMount(async () => {
         const response = await fetch(`/shop/items`);
@@ -39,16 +40,16 @@
     </section>
     <section class="flex flex-col items-center justify-center gap-4">
         <div class="flex flex-wrap items-center justify-center gap-4">
-            <a href="?category=all" class="px-4 py-2 bg-transparent text-[var(--theme-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow border stroke-[var(--theme-color)]">All</a>
-            <a href="?category=software" class="px-4 py-2 bg-transparent text-[var(--theme-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow border stroke-[var(--theme-color)]">Software</a>
-            <a href="?category=audio" class="px-4 py-2 bg-transparent text-[var(--theme-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow border stroke-[var(--theme-color)]">Audio Recording</a>
-            <a href="?category=video-editing" class="px-4 py-2 bg-transparent text-[var(--theme-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow border stroke-[var(--theme-color)]">Video Editing</a>
-            <a href="?category=audio-editing" class="px-4 py-2 bg-transparent text-[var(--theme-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow border stroke-[var(--theme-color)]">Audio Editing</a>
-            <a href="?category=photography" class="px-4 py-2 bg-transparent text-[var(--theme-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow border stroke-[var(--theme-color)]">Photography</a>
-            <a href="?category=storage" class="px-4 py-2 bg-transparent text-[var(--theme-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow border stroke-[var(--theme-color)]">Storage</a>
-            <a href="?category=accessories" class="px-4 py-2 bg-transparent text-[var(--theme-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow border stroke-[var(--theme-color)]">Accessories</a>
-            <a href="?category=streaming" class="px-4 py-2 bg-transparent text-[var(--theme-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow border stroke-[var(--theme-color)]">Streaming</a>
-            <a href="?category=other" class="px-4 py-2 bg-transparent text-[var(--theme-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow border stroke-[var(--theme-color)]">Other</a>
+            <a href="?category=all" class="category-button {category === 'all' ? 'selected' : ''}">All</a>
+            <a href="?category=software" class="category-button {category === 'software' ? 'selected' : ''}">Software</a>
+            <a href="?category=audio" class="category-button {category === 'audio' ? 'selected' : ''}">Audio Recording</a>
+            <a href="?category=video-editing" class="category-button {category === 'video-editing' ? 'selected' : ''}">Video Editing</a>
+            <a href="?category=audio-editing" class="category-button {category === 'audio-editing' ? 'selected' : ''}">Audio Editing</a>
+            <a href="?category=photography" class="category-button {category === 'photography' ? 'selected' : ''}">Photography</a>
+            <a href="?category=storage" class="category-button {category === 'storage' ? 'selected' : ''}">Storage</a>
+            <a href="?category=accessories" class="category-button {category === 'accessories' ? 'selected' : ''}">Accessories</a>
+            <a href="?category=streaming" class="category-button {category === 'streaming' ? 'selected' : ''}">Streaming</a>
+            <a href="?category=other" class="category-button {category === 'other' ? 'selected' : ''}">Other</a>
         </div>
     </section>
     <section class="cards-container">
@@ -74,5 +75,37 @@
         font-weight: bold;
         text-align: center;
         margin: 1rem 0;
+    }
+
+    .category-button {
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        border: 2px solid var(--theme-color);
+        background-color: transparent;
+        color: var(--theme-color);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        font-weight: 500;
+    }
+
+    .category-button:hover {
+        background-color: var(--theme-color);
+        color: var(--background-color);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .category-button.selected {
+        background-color: var(--theme-color);
+        color: var(--background-color);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        font-weight: 600;
+    }
+
+    .category-button.selected:hover {
+        background-color: var(--secondary-theme-color);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
     }
 </style>
