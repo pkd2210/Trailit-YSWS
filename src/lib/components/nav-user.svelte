@@ -25,16 +25,10 @@
 						class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 						{...props}
 					>
-						{#if user.avatar}
-							<Avatar.Root class="size-8 rounded-lg">
-								<Avatar.Image src={user.avatar} alt={user.name} />
-								<Avatar.Fallback class="rounded-lg">CN</Avatar.Fallback>
-							</Avatar.Root>
-						{:else}
-							<Avatar.Root class="size-8 rounded-lg">
-								<Avatar.Fallback class="rounded-lg">{user.name.charAt(0)}</Avatar.Fallback>
-							</Avatar.Root>
-						{/if}
+						<Avatar.Root class="size-8 rounded-lg">
+							<Avatar.Image src={user.avatar} alt={user.name} />
+							<Avatar.Fallback class="rounded-lg">{user.name.charAt(0)}</Avatar.Fallback>
+						</Avatar.Root>
 						<div class="grid flex-1 text-start text-sm leading-tight">
 							<span class="truncate font-medium">{user.name}</span>
 							<span>{config['tokens-symbol']}: <span class="font-bold">{data.userTokens ? data.userTokens.toLocaleString() : '0'}</span></span>
@@ -52,19 +46,13 @@
 			>
 				<DropdownMenu.Label class="p-0 font-normal">
 					<div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
-						{#if user.avatar}
-							<Avatar.Root class="size-8 rounded-lg">
-								<Avatar.Image src={user.avatar} alt={user.name} />
-								<Avatar.Fallback class="rounded-lg">CN</Avatar.Fallback>
-							</Avatar.Root>
-						{:else}
-							<Avatar.Root class="size-8 rounded-lg">
-								<Avatar.Fallback class="rounded-lg">{user.name.charAt(0)}</Avatar.Fallback>
-							</Avatar.Root>
-						{/if}
+						<Avatar.Root class="size-8 rounded-lg">
+							<Avatar.Image src={user.avatar} alt={user.name} />
+							<Avatar.Fallback class="rounded-lg">{user.name.charAt(0)}</Avatar.Fallback>
+						</Avatar.Root>
 						<div class="grid flex-1 text-start text-sm leading-tight">
 							<span class="truncate font-medium">{user.name}</span>
-							<span class="truncate text-xs">{user.slackId}</span>
+							<span class="truncate text-xs">{user.email}</span>
 						</div>
 					</div>
 				</DropdownMenu.Label>
@@ -93,7 +81,7 @@
 				<DropdownMenu.Separator />-->
 				<DropdownMenu.Item>
 					<LogOutIcon />
-					<a href="{config['url-base']}/logout" class="flex items-center gap-2">
+					<a href="{config['url-base']}/api/logout" class="flex items-center gap-2">
 						Log out
 					</a>
 				</DropdownMenu.Item>

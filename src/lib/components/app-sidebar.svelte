@@ -26,7 +26,7 @@
 		user: data.user ? {
 			name: data.user.first_name || "User",
 			email: data.user.email || "",
-			avatar: data.user.avatar,
+			avatar: "https://cachet.dunkirk.sh/users/" + (data.user.slack_id || "default") + "/r",
 		} : null,
 		navMain: [
 			{
