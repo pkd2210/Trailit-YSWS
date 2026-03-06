@@ -70,12 +70,6 @@
         margin: 0 auto;
     }
     
-    .title {
-        font-size: 2rem;
-        font-weight: bold;
-        text-align: center;
-        margin: 1rem 0;
-    }
 
     .category-button {
         padding: 0.5rem 1rem;
