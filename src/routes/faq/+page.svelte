@@ -21,6 +21,10 @@
             question: "How long will TrailIt run?",
             answer: "TrailIt will run for 2 monthes (With expension maybe availdable), from March 15th, to May 15th"
         },
+        {
+            question: "How do I track my time?",
+            answer: "To track you development time for \"The product\", you should use <a href='https://hackatime.hackclub.com' target='_blank'><u>Hackatime</u></a>.<br>To track your time for \"The Video\", you should use <a href='https://lapse.hackclub.com' target='_blank'><u>Lapse</u></a>."
+        },
     ];
 
     let openItems: { [key: number]: boolean } = {};
