@@ -6,12 +6,20 @@
     // FAQ Data - customize these questions and answers
     const faqData = [
         {
+            question: "What is TrailIt?",
+            answer: "TrailIt is a Hack Club event where you'll build a web-app project, then produce a trailer / showcase video for it. <br> And then you'll recive clappboards, and buy production equipment with them in the <a href='/shop'><u>shop</u></a>!"
+        },
+        {
             question: "How do I earn clappboards?",
             answer: "Clappboards can be Earned thorugh 2 ways: <br> 1. Completing <a href='/quests'><u>quests</u></a> <br> 2. Submitting projects"
         },
         {
-            question: "What is the calcullation for clappboards?",
+            question: "What is the calculation for clappboards?",
             answer: "You earn Clappboards based on a formula of rating we have * hours you did.<br>We have 2 formulas, 1 for products, and one for videos."
+        },
+        {
+            question: "How long will TrailIt run?",
+            answer: "TrailIt will run for 2 monthes (With expension maybe availdable), from March 15th, to May 15th"
         },
     ];
 
