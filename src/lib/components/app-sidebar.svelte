@@ -74,6 +74,11 @@
 					},
 				],
 			}] : []),
+						{
+				title: "FAQ",
+				url: `${config['url-base']}/faq`,
+				icon: GalleryVerticalEndIcon,
+			},
 		],
 	});
 </script>
