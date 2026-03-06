@@ -63,7 +63,7 @@
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
                 {#each Object.values(data.projectListByName || {}) as project}
-                    <DropdownMenu.Item>{project.name}</DropdownMenu.Item>
+                    <DropdownMenu.Item>{project.name} | {project.text}</DropdownMenu.Item>
                 {/each}
             </DropdownMenu.Content>
         </DropdownMenu.Root>
