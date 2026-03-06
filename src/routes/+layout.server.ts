@@ -12,7 +12,6 @@ export async function load({ cookies }: any) {
         // Return demo user data
         return {
             user: {
-                email: 'demo@trailit.com',
                 first_name: 'Demo',
                 last_name: 'User',
                 slack_id: 'demo_user',
