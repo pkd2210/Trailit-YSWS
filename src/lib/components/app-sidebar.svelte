@@ -107,7 +107,7 @@
 			<NavUser user={sidebarData.user} data={data}/>
 		{:else}
 			<div class="px-3 py-2">
-				<a href="{config['url-base']}/api/login" class="text-sm text-primary hover:underline">Login</a>
+				<a href="{config['url-base']}/api/login" class="text-md text-red-500 hover:underline font-large text-center">Login</a>
 			</div>
 		{/if}
 	</Sidebar.Footer>

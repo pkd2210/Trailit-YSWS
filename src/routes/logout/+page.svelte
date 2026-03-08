@@ -1,1 +1,0 @@
-<!--This is here just to show the browser that the logout route is working -->

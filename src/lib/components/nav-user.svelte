@@ -81,7 +81,7 @@
 				<DropdownMenu.Separator />-->
 				<DropdownMenu.Item>
 					<LogOutIcon />
-					<a href="{config['url-base']}/api/logout" class="flex items-center gap-2">
+					<a href="{config['url-base']}/logout" class="flex items-center gap-2">
 						Log out
 					</a>
 				</DropdownMenu.Item>
