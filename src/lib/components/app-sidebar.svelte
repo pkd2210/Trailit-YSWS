@@ -5,6 +5,7 @@
 	import TrophyIcon from "@lucide/svelte/icons/trophy";
 	import SendHorizontal from "@lucide/svelte/icons/send-horizontal";
 	import Clapperboard from "@lucide/svelte/icons/clapperboard";
+	import { Separator } from "$lib/components/ui/separator/index.js";
 </script>
 
 <script lang="ts">
@@ -97,6 +98,7 @@
 		</a>
 	</Sidebar.Header>
 	<Sidebar.Content>
+		<Separator style="background-color: #ec3750;"/>
 		<NavMain items={sidebarData.navMain} />
 	</Sidebar.Content>
 	<Sidebar.Footer>
