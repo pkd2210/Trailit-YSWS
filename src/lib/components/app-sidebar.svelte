@@ -101,6 +101,7 @@
 		<Separator style="background-color: #ec3750;"/>
 		<NavMain items={sidebarData.navMain} />
 	</Sidebar.Content>
+	<Separator style="background-color: #ec3750;"/>
 	<Sidebar.Footer>
 		{#if sidebarData.user}
 			<NavUser user={sidebarData.user} data={data}/>
