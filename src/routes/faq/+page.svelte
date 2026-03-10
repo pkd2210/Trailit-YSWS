@@ -15,7 +15,7 @@
         },
         {
             question: "What is the calculation for clappboards?",
-            answer: "You earn Clappboards based on a formula of rating we have * hours you did.<br>We have 2 formulas, 1 for products, and one for videos."
+            answer: "You earn Clappboards based on a rating you will get from 0 to 10 (with another 3 bonus points availdable) * 12(Development) or 13.5(Video production) * hours you did."
         },
         {
             question: "How long will TrailIt run?",
