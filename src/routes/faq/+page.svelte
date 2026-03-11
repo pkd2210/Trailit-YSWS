@@ -2,6 +2,7 @@
     import config from '$lib/stores/config.json';
     import * as Collapsible from "$lib/components/ui/collapsible/index.js";
     import { ChevronDown } from "@lucide/svelte";
+    import Separator from '$lib/components/ui/separator/separator.svelte';
 
     // FAQ Data - customize these questions and answers
     const faqData = [
@@ -25,6 +26,10 @@
             question: "How do I track my time?",
             answer: "To track you development time for \"The product\", you should use <a href='https://hackatime.hackclub.com' target='_blank'><u>Hackatime</u></a>.<br>To track your time for \"The Video\", you should use <a href='https://lapse.hackclub.com' target='_blank'><u>Lapse</u></a>."
         },
+        {
+            question: "How do I submit my project?",
+            answer: "To submit your project, you got 2 parts:<br> 1. The Product: You should submit a link to your web-app, and a short description of it in the <a href='/submit/product'><u>Product Submission Form</u></a>.<br> 2. The Video: You should submit a link to your video, and a short description of it in the <a href='/submit/video'><u>Video Submission Form</u></a>."
+        },
     ];
 
     let openItems: { [key: number]: boolean } = {};
@@ -42,6 +47,8 @@
     <section class="faq-header">
         <div class="title">Frequently Asked Questions</div>
         <div class="subtitle">Find answers to common questions about {config["ysws-name"]}</div>
+        <div class="text-foreground text-center">By Submitting a Project to this YSW, You agree you will not preform any fraud, In any shape or form in all of HC Services (Including but not limited to this ysws, lapse, and hackatime)</div>
+        <Separator class="my-4" style="background-color: #ec3750;" />
     </section>
 
     <section class="faq-content">
