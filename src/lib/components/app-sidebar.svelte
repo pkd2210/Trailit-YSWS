@@ -75,11 +75,25 @@
 					},
 				],
 			}] : []),
-						{
+			{
 				title: "FAQ",
 				url: `${config['url-base']}/faq`,
 				icon: GalleryVerticalEndIcon,
 			},
+			...(data.user?.Reviewer ? [{
+				title: "Review Submissions",
+				icon: Clapperboard,
+				items: [
+					{
+						title: "Products",
+						url: `${config['url-base']}/review/products`,
+					},
+					{
+						title: "Videos",
+						url: `${config['url-base']}/review/videos`,
+					},
+				],
+			}] : []),
 		],
 	});
 </script>

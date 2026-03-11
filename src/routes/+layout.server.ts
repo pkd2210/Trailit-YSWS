@@ -15,7 +15,8 @@ export async function load({ cookies }: any) {
                 first_name: 'Demo',
                 last_name: 'User',
                 slack_id: 'demo_user',
-                avatar: null
+                avatar: null,
+                Reviewer: false
             },
             isAdmin: false,
             userTokens: 1000, // Give demo user some tokens to play with
@@ -59,9 +60,11 @@ export async function load({ cookies }: any) {
                 ]);
                 userTokens = 0;
                 userRecordId = newUserRecord[0].id;
+                data.identity.Reviewer = false;
             } else {
                 userTokens = Number(userRecord[0].get('Tokens')) || 0;
                 userRecordId = userRecord[0].id;
+                data.identity.Reviewer = Boolean(userRecord[0].get('Reviewer')) || false;
             }
         } catch (error) {
             console.error('Error checking admin status:', error);
