@@ -30,6 +30,18 @@
             question: "How do I submit my project?",
             answer: "To submit your project, you got 2 parts:<br> 1. The Product: You should submit a link to your web-app, and a short description of it in the <a href='/submit/product'><u>Product Submission Form</u></a>.<br> 2. The Video: You should submit a link to your video, and a short description of it in the <a href='/submit/video'><u>Video Submission Form</u></a>."
         },
+        {
+            question: "Can I submit more than one project?",
+            answer: "Yes! You can submit as many projects as you want."
+        },
+        {
+            question: "What counts as a web-app?",
+            answer: "A web-app is basicly any non-static website, that has some sort of functionality or interactivity to it. It can be a game, a tool, a social media platform, or anything else you can think of! If you're not sure if your project counts as a web-app, feel free to ask in the <a href='https://hackclub.enterprise.slack.com/archives/C0AGG8J6PLL' target='_blank'><u>#trailit-ysws</u></a> channel on Slack! (Game engines like unity and godot does *NOT* count!)"
+        },
+        {
+            question: "Is AI Allowed?",
+            answer: "Yes, AI is allowed to be used, but, its most be used only as an assistent, IT SHOULD *NOT* Write code insted of you."
+        }
     ];
 
     let openItems: { [key: number]: boolean } = {};
