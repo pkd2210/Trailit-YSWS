@@ -3,6 +3,8 @@
 	import HomeIcon from "@lucide/svelte/icons/home";
 	import ShoppingCartIcon from "@lucide/svelte/icons/shopping-cart";
 	import TrophyIcon from "@lucide/svelte/icons/trophy";
+	import images from "@lucide/svelte/icons/images";
+	import ScrollText from "@lucide/svelte/icons/scroll-text";
 	import SendHorizontal from "@lucide/svelte/icons/send-horizontal";
 	import Clapperboard from "@lucide/svelte/icons/clapperboard";
 	import { Separator } from "$lib/components/ui/separator/index.js";
@@ -79,6 +81,21 @@
 				title: "FAQ",
 				url: `${config['url-base']}/faq`,
 				icon: GalleryVerticalEndIcon,
+			},
+			{
+				title: "Tutorials",
+				icon: ScrollText,
+				items: [
+					{
+						title: "Soon...",
+					},
+					
+				],
+			},
+			{
+				title: "Gallery",
+				url: `${config['url-base']}/gallery`,
+				icon: images,
 			},
 			...(data.user?.Reviewer ? [{
 				title: "Review Submissions",
