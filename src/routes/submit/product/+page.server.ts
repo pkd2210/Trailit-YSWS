@@ -199,7 +199,8 @@ export const actions: Actions = {
                         "city": user.addresses && user.addresses.length > 0 ? user.addresses[0].city || '' : '',
                         "state": user.addresses && user.addresses.length > 0 ? user.addresses[0].state || '' : '',
                         "zip": user.addresses && user.addresses.length > 0 ? user.addresses[0].postal_code || '' : '',
-                        "country": user.addresses && user.addresses.length > 0 ? user.addresses[0].country || '' : '',
+                        "last_name": user.addresses && user.addresses.length > 0 ? user.addresses[0].last_name || '' : '',
+                        "first_name": user.addresses && user.addresses.length > 0 ? user.addresses[0].first_name || '' : '',
                         "birthdate": user.birthday || '',
                     }
                 }
