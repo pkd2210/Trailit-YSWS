@@ -41,7 +41,8 @@ export const actions: Actions = {
       // First get the product record to retrieve the SlackID
       const productRecord = await base(process.env.PRODUCTS_TABLE_ID).find(productId);
       const submitterSlackID = productRecord.fields.SlackID;
-      
+      const tokensFromProduct = (styling + functionality + easeOfUse + needeness + bonus) * hours * 12;
+
       await base(process.env.PRODUCTS_TABLE_ID).update(productId, {
         "Rating: Styling": styling,
         "Rating: Functionality": functionality,
@@ -50,7 +51,8 @@ export const actions: Actions = {
         "Rating: Bonus": bonus,
         "Status": "Approved",
         "Hours": hours,
-        "Hours Justification": hoursJustification
+        "Hours Justification": hoursJustification,
+        "Payout": tokensFromProduct
       });
       
       // if successfully updated add the tokens to the user
@@ -62,7 +64,6 @@ export const actions: Actions = {
         if (userRecord.length > 0) {
           const userRecordId = userRecord[0].id;
           const currentTokens = userRecord[0].fields.Tokens || 0;
-          const tokensFromProduct = (styling + functionality + easeOfUse + needeness + bonus) * hours * 12;
           const newTokens = currentTokens + tokensFromProduct;
           await base(process.env.USERS_TABLE_ID).update(userRecordId, {
             "Tokens": newTokens
