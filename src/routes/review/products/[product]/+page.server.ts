@@ -33,9 +33,15 @@ export const actions: Actions = {
     const needeness = Number(data.get('needeness'));
     const bonus = Number(data.get('bonus'));
     const hours = Number(data.get('hours'));
+    const hoursJustification = data.get('hoursJustification') as string;
 
     try {
       const base = new Airtable({ apiKey: process.env.AIRTABLE_ACCESS_TOKEN }).base(process.env.BASE_ID);
+      
+      // First get the product record to retrieve the SlackID
+      const productRecord = await base(process.env.PRODUCTS_TABLE_ID).find(productId);
+      const submitterSlackID = productRecord.fields.SlackID;
+      
       await base(process.env.PRODUCTS_TABLE_ID).update(productId, {
         "Rating: Styling": styling,
         "Rating: Functionality": functionality,
@@ -43,9 +49,28 @@ export const actions: Actions = {
         "Rating: Needeness": needeness,
         "Rating: Bonus": bonus,
         "Status": "Approved",
-        "Hours": hours
+        "Hours": hours,
+        "Hours Justification": hoursJustification
       });
       
+      // if successfully updated add the tokens to the user
+      if (submitterSlackID) {
+        const userRecord = await base(process.env.USERS_TABLE_ID).select({
+          filterByFormula: `{SlackID} = '${submitterSlackID}'`
+        }).firstPage();
+        
+        if (userRecord.length > 0) {
+          const userRecordId = userRecord[0].id;
+          const currentTokens = userRecord[0].fields.Tokens || 0;
+          const tokensFromProduct = (styling + functionality + easeOfUse + needeness + bonus) * hours * 12;
+          const newTokens = currentTokens + tokensFromProduct;
+          await base(process.env.USERS_TABLE_ID).update(userRecordId, {
+            "Tokens": newTokens
+          });
+        }
+      }
+      
+
       return { success: true };
     } catch (error) {
       console.error('Error approving product:', error);

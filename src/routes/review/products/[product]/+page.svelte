@@ -24,6 +24,7 @@
   let Bonus = $state(0);
 
   let RejectionReason = $state('');
+  let HoursJustification = $state('');
   let submitterUsername = $state(null);
   let loadingUsername = $state(false);
 
@@ -111,6 +112,9 @@
                         <Separator class="my-4" />
                         <label for="hours" class="block text-sm font-medium mb-2">Hours:</label>
                         <input id="hours"type="number" bind:value={Hours} min="0" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"placeholder="0"/>
+                        <Separator class="my-4" />
+                        <label for="hours-justification" class="block text-sm font-medium mb-2">Hours Justification:</label>
+                        <textarea id="hours-justification" bind:value={HoursJustification} required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Provide justification for the hours awarded" rows="3"></textarea>
                       </div>
                       <AlertDialog.Footer>
                           <AlertDialog.Cancel onclick={() => (approved = false)} style="cursor: pointer;">Cancel</AlertDialog.Cancel>
@@ -129,6 +133,7 @@
                             <input type="hidden" name="needeness" value={Needeness} />
                             <input type="hidden" name="bonus" value={Bonus} />
                             <input type="hidden" name="hours" value={Hours} />
+                            <input type="hidden" name="hoursJustification" value={HoursJustification} />
                             <Button type="submit" style="cursor: pointer;">Approve Product</Button>
                           </form>
                       </AlertDialog.Footer>
