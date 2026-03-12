@@ -85,7 +85,7 @@
         }
     }
     
-    // Remove uploaded image
+    // Remove uploaded video
     function removeImage() {
         uploadedImageUrl = "";
         formData.uploadedImageUrl = "";
@@ -108,7 +108,7 @@
         }
         
         if (!uploadedImageUrl) {
-            errors.push("Project Screenshot is required");
+          errors.push("Project Video is required");
         }
         
         if (!formData.playableLink.trim()) {
@@ -144,18 +144,20 @@
         <Textarea id="projectDescription" name="projectDescription" placeholder="Describe your project in detail" bind:value={formData.projectDescription} required />
       </Field.Field>
       <Field.Field>
-        <Field.Label>Project Screenshot *</Field.Label>
+        <Field.Label>Project Video (Trailer / Showcase) *</Field.Label>
         
         {#if uploadedImageUrl}
-          <!-- Show uploaded image -->
+          <!-- Show uploaded video -->
           <div class="space-y-4">
             <div class="border rounded-lg p-4 bg-green-50">
-              <img 
-                src={uploadedImageUrl} 
-                alt="Uploaded project screenshot" 
+              <video
+                src={uploadedImageUrl}
                 class="max-w-full h-auto max-h-64 mx-auto rounded-md"
-              />
-              <p class="text-sm text-green-600 mt-2 text-center">Image uploaded successfully!</p>
+                controls
+              >
+                <track kind="captions" />
+              </video>
+              <p class="text-sm text-green-600 mt-2 text-center">Video uploaded successfully!</p>
             </div>
             <div class="flex justify-center space-x-2">
               <Button 
@@ -164,7 +166,7 @@
                 onclick={removeImage}
                 type="button"
               >
-                Remove Image
+                Remove Video
               </Button>
             </div>
           </div>
@@ -181,19 +183,19 @@
             {#if isUploading}
               <div class="text-center">
                 <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-2"></div>
-                <p class="text-gray-500">Uploading image...</p>
+                <p class="text-gray-500">Uploading video...</p>
               </div>
             {:else}
               <div class="text-center">
-                <p class="text-gray-500 mb-2">Click or drag images here to upload</p>
-                <p class="text-xs text-gray-400">Supports JPG, PNG, GIF (max 10MB)</p>
+                <p class="text-gray-500 mb-2">Click or drag videos here to upload</p>
+                <p class="text-xs text-gray-400">Supports MP4, MOV, WEBM Max (200MB)</p>
               </div>
             {/if}
           </div>
           
           <input 
             type="file" 
-            accept="image/*" 
+            accept="video/*" 
             class="hidden" 
             bind:this={fileInputRef}
             on:change={handleFileChange}

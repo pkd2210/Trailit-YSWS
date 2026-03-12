@@ -12,14 +12,14 @@ export const POST: RequestHandler = async ({ request }) => {
             return json({ error: 'No file provided' }, { status: 400 });
         }
 
-        // Check if the file is an image
-        if (!file.type.startsWith('image/')) {
-            return json({ error: 'File must be an image' }, { status: 400 });
+        // Check if the file is an video
+        if (!file.type.startsWith('video/')) {
+            return json({ error: 'File must be an video' }, { status: 400 });
         }
 
-        // Check file size (limit to 10MB)
-        if (file.size > 10 * 1024 * 1024) {
-            return json({ error: 'File size must be less than 10MB' }, { status: 400 });
+        // Check file size (limit to 200MB)
+        if (file.size > 200 * 1024 * 1024) {
+            return json({ error: 'File size must be less than 200MB' }, { status: 400 });
         }
 
         const hackclubApiKey = process.env.HACKCLUB_CDN_API_KEY;
