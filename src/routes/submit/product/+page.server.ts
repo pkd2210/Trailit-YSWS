@@ -195,12 +195,12 @@ export const actions: Actions = {
                         "AI Usage": formData.aiUsage,
                         "AI Usage Explanation": formData.aiUsageDetails || '',
                         "Hackatime project": formData.hackatimeProject || '',
-                        "address": user.addresses.line_1 + " " + user.addresses.line_2,
-                        "city": user.addresses.city,
-                        "state": user.addresses.state,
-                        "zip": user.addresses.postal_code,
-                        "country": user.addresses.country,
-                        "birthdate": user.birthdate,
+                        "address": user.addresses && user.addresses.length > 0 ? `${user.addresses[0].line_1 || ''} ${user.addresses[0].line_2 || ''}`.trim() : '',
+                        "city": user.addresses && user.addresses.length > 0 ? user.addresses[0].city || '' : '',
+                        "state": user.addresses && user.addresses.length > 0 ? user.addresses[0].state || '' : '',
+                        "zip": user.addresses && user.addresses.length > 0 ? user.addresses[0].postal_code || '' : '',
+                        "country": user.addresses && user.addresses.length > 0 ? user.addresses[0].country || '' : '',
+                        "birthdate": user.birthday || '',
                     }
                 }
             ]);
