@@ -10,7 +10,7 @@ export const load = async ({ parent, url }) => {
         throw redirect(303, '/api/login');
     }
     // Get users project from https://hackatime.hackclub.com/api/v1/users/SLACKID/stats?features=projects&start_date=2026-01-01
-    const response = await fetch(`https://hackatime.hackclub.com/api/v1/users/${data.user.slack_id}/stats?features=projects&start_date=2026-01-01`);
+    const response = await fetch(`https://hackatime.hackclub.com/api/v1/users/${data.user.slack_id}/stats?features=projects&start_date=2026-03-15`);
     const projectsData = await response.json();
     
     // Check if the response has projects and if it's an array
@@ -93,7 +93,7 @@ export const actions: Actions = {
         };
 
         // Check what is the hackatime project hours
-        const hackatimeResponse = await fetch(`https://hackatime.hackclub.com/api/v1/users/${user.slack_id}/stats?features=projects&start_date=2026-01-01`);
+        const hackatimeResponse = await fetch(`https://hackatime.hackclub.com/api/v1/users/${user.slack_id}/stats?features=projects&start_date=2026-03-15`);
         const hackatimeData = await hackatimeResponse.json();
         
         // Validation
