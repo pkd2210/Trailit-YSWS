@@ -37,5 +37,5 @@ export const GET = async ({ url, cookies }) => {
         sameSite: 'strict'
     });
 
-    throw redirect(303, config["url-base"] + "/shop");
+    throw redirect(303, config["url-base"] + "/faq");
 };
