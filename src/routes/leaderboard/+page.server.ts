@@ -27,7 +27,7 @@ async function fetchUserProfile(slackId: string) {
 export const load: PageServerLoad = async () => {
     try {
         const base = new Airtable({ apiKey: process.env.AIRTABLE_ACCESS_TOKEN }).base(process.env.BASE_ID);
-        const records = await base(process.env.USERS_TABLE_ID).select().all();
+        const records = await base(process.env.USERS_TABLE_ID).select({ maxRecords: 15 }).all();
         
         const usersData = records.map(record => ({
             SlackID: record.get('SlackID'),
