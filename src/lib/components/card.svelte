@@ -102,9 +102,15 @@
         <div class="actions">
             <div class="action-row">
                 {#if item.type == "grant"}
+                    {#if item.price<= data.userTokens}
                     <button on:click={() => showGrantDialog(item)} style="background-color: {config['theme-color']}; color: {config['background-color']}; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
                         Get Grant
                     </button>
+                    {:else}
+                    <button disabled style="background-color: grey; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: not-allowed;">
+                        Insufficient Funds, missing {config['tokens-symbol']}{item.price - data.userTokens}
+                    </button>
+                    {/if}
                 {:else}
                     {#if item.price<= data.userTokens}
                     <button  on:click={() => showPurchaseDialog(item)} style="background-color: {config['theme-color']}; color: {config['background-color']}; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
