@@ -32,15 +32,15 @@
     }
 </script>
 
-<div class="project-card" style="border-color: {config['secondary-theme-color']}; background-color: {config['background-color']};">
+<div class="project-card" style="border-color: var(--muted-foreground); background-color: {config['background-color']};">
     <div class="project-header">
-        <h2 style="color: {config['theme-color']};">{getProjectName()}</h2>
+        <h2 style="color: var(--foreground);">{getProjectName()}</h2>
         <span class="status {getStatusClass(getStatus())}">{getStatus()}</span>
     </div>
     
     <div class="content">
         {#if project.fields.Description}
-            <p style="color: {config['secondary-theme-color']};" class="description">{project.fields.Description}</p>
+            <p style="color: var(--muted-foreground);" class="description">{project.fields.Description}</p>
         {/if}
         
         <div class="project-details">
@@ -54,14 +54,14 @@
     <div class="actions">
         {#if project.fields['Code URL']}
             <a href="{project.fields['Code URL']}" target="_blank" 
-               style="background-color: {config['theme-color']}; color: {config['background-color']}; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.25rem; margin-right: 0.5rem; display: inline-block;">
+               style="background-color: var(--foreground); color: {config['background-color']}; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.25rem; margin-right: 0.5rem; display: inline-block;">
                 View Code
             </a>
         {/if}
         
         {#if project.fields['Playable URL']}
             <a href="{project.fields['Playable URL']}" target="_blank" 
-               style="background-color: {config['secondary-theme-color']}; color: {config['background-color']}; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.25rem; display: inline-block;">
+               style="background-color: var(--muted-foreground); color: {config['background-color']}; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.25rem; display: inline-block;">
                 View Project
             </a>
         {/if}
@@ -91,7 +91,7 @@
         align-items: center;
         margin-bottom: 1rem;
         padding-bottom: 1rem;
-        border-bottom: 1px solid var(--secondary-theme-color, #e0e0e0);
+        border-bottom: 1px solid var(--muted-foreground);
         flex-wrap: wrap;
         gap: 0.5rem;
     }
@@ -172,7 +172,7 @@
         text-align: right;
         margin-top: 1rem;
         padding-top: 1rem;
-        border-top: 1px solid var(--secondary-theme-color, #e0e0e0);
+        border-top: 1px solid var(--muted-foreground);
     }
     
     @media (max-width: 768px) {

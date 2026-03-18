@@ -29,13 +29,13 @@
         <div class="title">{config["ysws-name"]}'s Shop</div>
         {#if data.user}
         <div class="flex flex-wrap items-center justify-center gap-4">
-            <a href="{config['url-base']}/shop/orders" class="px-4 py-2 bg-[var(--theme-color)] text-[var(--background-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow">Orders</a>
-            <a href="{config['url-base']}/shop/projects" class="px-4 py-2 bg-[var(--theme-color)] text-[var(--background-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow">Projects</a>
+            <a href="{config['url-base']}/shop/orders" class="px-4 py-2 bg-[var(--foreground)] text-[var(--background-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow">Orders</a>
+            <a href="{config['url-base']}/shop/projects" class="px-4 py-2 bg-[var(--foreground)] text-[var(--background-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow">Projects</a>
         </div>
         {/if}
         <!--<div class="subtitle" style="opacity: 0.7;">* Fullfillment will be based on local prices & availability.</div>-->
         {#if data.isAdmin}
-                    <a target="_blank" href="https://dog-match.fillout.com/trailit-itemadd?passkey={data.filloutPasskey}" class="px-4 py-2 bg-[var(--theme-color)] text-[var(--background-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow">Create a new item</a>
+                    <a target="_blank" href="https://dog-match.fillout.com/trailit-itemadd?passkey={data.filloutPasskey}" class="px-4 py-2 bg-[var(--foreground)] text-[var(--background-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow">Create a new item</a>
         {/if}
     </section>
     <section class="flex flex-col items-center justify-center gap-4">
@@ -74,9 +74,9 @@
     .category-button {
         padding: 0.5rem 1rem;
         border-radius: 0.5rem;
-        border: 2px solid var(--theme-color);
+        border: 2px solid var(--foreground);
         background-color: transparent;
-        color: var(--theme-color);
+        color: var(--foreground);
         text-decoration: none;
         transition: all 0.3s ease;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -84,21 +84,21 @@
     }
 
     .category-button:hover {
-        background-color: var(--theme-color);
+        background-color: var(--foreground);
         color: var(--background-color);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         transform: translateY(-2px);
     }
 
     .category-button.selected {
-        background-color: var(--theme-color);
+        background-color: var(--foreground);
         color: var(--background-color);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         font-weight: 600;
     }
 
     .category-button.selected:hover {
-        background-color: var(--secondary-theme-color);
+        background-color: var(--muted-foreground);
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
     }

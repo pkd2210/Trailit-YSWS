@@ -147,11 +147,11 @@
     }
 </script>
 
-<div class="quest-card" style="border-color: {config['secondary-theme-color']}; background-color: {config['background-color']};">
+<div class="quest-card" style="border-color: var(--muted-foreground); background-color: {config['background-color']};">
     <div class="quest-header">
-        <h2 style="color: {config['theme-color']};">{quest.fields.Name}</h2>
+        <h2 style="color: var(--foreground);">{quest.fields.Name}</h2>
         <div class="quest-info">
-            <span class="reward-amount" style="color: {config['theme-color']};">
+            <span class="reward-amount" style="color: var(--foreground);">
                 {getRewardDisplay()}
             </span>
             <span class="status {getStatusClass(getQuestStatus())}">
@@ -174,12 +174,12 @@
     
     <div class="content">
         {#if getRewardTypes().length > 0 && quest.fields.Description}
-            <p style="color: {config['secondary-theme-color']};" class="description">{quest.fields.Description}</p>
+            <p style="color: var(--muted-foreground);" class="description">{quest.fields.Description}</p>
         {/if}
                 {#if hasPrizeReward() && getPrizeNames().length > 0}
             <div class="prize-list">
-                <h4 style="color: {config['theme-color']}; margin: 0.5rem 0;">Prizes:</h4>
-                <ul style="color: {config['secondary-theme-color']}; margin: 0; padding-left: 1.5rem;">
+                <h4 style="color: var(--foreground); margin: 0.5rem 0;">Prizes:</h4>
+                <ul style="color: var(--muted-foreground); margin: 0; padding-left: 1.5rem;">
                     {#each getPrizeNames() as prizeName}
                         <li>{prizeName}</li>
                     {/each}
@@ -192,7 +192,7 @@
             <button 
                 class="redeem-btn" 
                 class:redeeming={isRedeeming}
-                style="background-color: {config['theme-color']}; color: {config['background-color']};" 
+                style="background-color: var(--foreground); color: {config['background-color']};" 
                 on:click={redeemQuest}
                 disabled={isRedeeming}>
                 {#if isRedeeming}
@@ -262,7 +262,7 @@
         align-items: center;
         margin-bottom: 1rem;
         padding-bottom: 1rem;
-        border-bottom: 1px solid var(--secondary-theme-color, #e0e0e0);
+        border-bottom: 1px solid var(--muted-foreground);
         flex-wrap: wrap;
         gap: 0.5rem;
     }
@@ -378,7 +378,7 @@
         text-align: right;
         margin-top: 1rem;
         padding-top: 1rem;
-        border-top: 1px solid var(--secondary-theme-color, #e0e0e0);
+        border-top: 1px solid var(--muted-foreground);
     }
 
     .redeem-btn {
@@ -412,8 +412,8 @@
         margin-top: 1rem;
         padding: 0.75rem;
         border-radius: 0.375rem;
-        background: rgba(var(--theme-color-rgb, 236, 55, 80), 0.05);
-        border: 1px solid rgba(var(--theme-color-rgb, 236, 55, 80), 0.1);
+        background: color-mix(in oklab, var(--foreground) 5%, transparent);
+        border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
     }
 
     .prize-list h4 {

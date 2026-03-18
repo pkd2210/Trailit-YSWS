@@ -27,9 +27,9 @@
     const screenshot = project['Screenshot'] || '';
 </script>
 
-<div class="gallery-card" style="border-color: {config['secondary-theme-color']}; background-color: {config['background-color']};">
+<div class="gallery-card" style="border-color: var(--muted-foreground); background-color: {config['background-color']};">
     <div class="card-header">
-        <h2 style="color: {config['theme-color']};">{project['Product Name'] || 'Untitled'}</h2>
+        <h2 style="color: var(--foreground);">{project['Product Name'] || 'Untitled'}</h2>
         <span class="hours">{project['Hours']}h</span>
     </div>
 
@@ -46,7 +46,7 @@
     </div>
 
     {#if project['Description']}
-        <p class="description" style="color: {config['secondary-theme-color']};">{project['Description'].trim()}</p>
+        <p class="description" style="color: var(--muted-foreground);">{project['Description'].trim()}</p>
     {/if}
 
     <div class="detail-row">
@@ -66,13 +66,13 @@
     <div class="actions">
         {#if project['Code URL']}
             <a href={project['Code URL']} target="_blank" rel="noreferrer"
-               style="background-color: {config['theme-color']}; color: {config['background-color']};">
+               style="background-color: var(--foreground); color: {config['background-color']};">
                 View Code
             </a>
         {/if}
         {#if project['Playable URL']}
             <a href={project['Playable URL']} target="_blank" rel="noreferrer"
-               style="background-color: {config['secondary-theme-color']}; color: {config['background-color']};">
+               style="background-color: var(--muted-foreground); color: {config['background-color']};">
                 Try It
             </a>
         {/if}
@@ -102,7 +102,7 @@
         justify-content: space-between;
         align-items: center;
         padding-bottom: 0.75rem;
-        border-bottom: 1px solid var(--secondary-theme-color, #e0e0e0);
+        border-bottom: 1px solid var(--muted-foreground);
         flex-wrap: wrap;
         gap: 0.5rem;
     }

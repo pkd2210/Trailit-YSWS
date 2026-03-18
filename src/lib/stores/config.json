@@ -1,8 +1,5 @@
 {
     "ysws-name": "TrailIt",
-    "theme-color": "#ec3750",
-    "secondary-theme-color": "#ec3750",
-    "background-color": "#17171D",
     "ysws-description": "YS: Web-app And produce a trailer / showcase video for you project WS: Filming, editing, and recording equipment",
     "hca-client-id": "5de8b3e343c12053b28ea18ea473be67",
     "url-base": "https://trailit.hackclub.com",

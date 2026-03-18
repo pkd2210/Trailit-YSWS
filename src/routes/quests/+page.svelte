@@ -40,7 +40,7 @@
         <section class="flex flex-col items-center justify-center gap-4">
             <div class="title">{config["ysws-name"]}'s Quests</div>
             <div class="flex flex-wrap items-center justify-center gap-4">
-                <a href="{config['url-base']}/shop" class="px-4 py-2 bg-[var(--theme-color)] text-[var(--background-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow">Back to the shop</a><br>
+                <a href="{config['url-base']}/shop" class="px-4 py-2 bg-[var(--foreground)] text-[var(--background-color)] rounded-lg shadow-md hover:shadow-lg transition-shadow">Back to the shop</a><br>
             </div>
         </section>
     </div>

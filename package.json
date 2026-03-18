@@ -33,6 +33,7 @@
 	"dependencies": {
 		"@lucide/svelte": "^0.577.0",
 		"airtable": "^0.12.2",
-		"dotenv": "^17.2.3"
+		"dotenv": "^17.2.3",
+		"mode-watcher": "^1.1.0"
 	}
 }

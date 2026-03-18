@@ -30,9 +30,9 @@
     }
 </script>
 
-<div class="order-card" style="border-color: {config['secondary-theme-color']}; background-color: {config['background-color']};">
+<div class="order-card" style="border-color: var(--muted-foreground); background-color: {config['background-color']};">
     <div class="order-header">
-        <h2 style="color: {config['theme-color']};">{getItemName()}</h2>
+        <h2 style="color: var(--foreground);">{getItemName()}</h2>
         <span class="status {getStatusClass(getStatus())}">{getStatus()}</span>
     </div>
     
@@ -77,7 +77,7 @@
         align-items: center;
         margin-bottom: 1rem;
         padding-bottom: 1rem;
-        border-bottom: 1px solid var(--secondary-theme-color, #e0e0e0);
+        border-bottom: 1px solid var(--muted-foreground);
         flex-wrap: wrap;
         gap: 0.5rem;
     }

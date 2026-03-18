@@ -125,7 +125,7 @@
     }
 
     .faq-item {
-        border: 2px solid var(--secondary-theme-color);
+        border: 2px solid var(--muted-foreground);
         border-radius: 0.5rem;
         background-color: var(--background-color);
         overflow: hidden;
@@ -148,7 +148,7 @@
         align-items: center;
         justify-content: space-between;
         transition: all 0.3s ease;
-        color: var(--theme-color);
+        color: var(--foreground);
     }
 
     :global(.faq-question:hover) {
@@ -162,7 +162,7 @@
     }
 
     :global(.faq-chevron) {
-        color: var(--theme-color);
+        color: var(--foreground);
         transition: transform 0.3s ease;
         flex-shrink: 0;
     }
@@ -177,7 +177,7 @@
 
     .faq-answer-content {
         padding: 0 1.25rem 1.25rem 1.25rem;
-        color: var(--secondary-theme-color);
+        color: var(--muted-foreground);
         line-height: 1.6;
         font-size: 1rem;
     }
@@ -193,13 +193,13 @@
     .contact-card {
         text-align: center;
         padding: 2rem;
-        border: 2px solid var(--secondary-theme-color);
+        border: 2px solid var(--muted-foreground);
         border-radius: 0.5rem;
         background: linear-gradient(135deg, var(--background-color) 0%, rgba(236, 55, 80, 0.05) 100%);
     }
 
     .contact-card h3 {
-        color: var(--theme-color);
+        color: var(--foreground);
         font-size: 1.5rem;
         font-weight: bold;
         margin-bottom: 0.5rem;
@@ -207,7 +207,7 @@
     }
 
     .contact-card p {
-        color: var(--secondary-theme-color);
+        color: var(--muted-foreground);
         margin-bottom: 1.5rem;
         font-size: 1rem;
     }
@@ -217,7 +217,7 @@
         align-items: center;
         justify-content: center;
         padding: 0.75rem 1.5rem;
-        background-color: var(--theme-color);
+        background-color: var(--foreground);
         color: var(--background-color);
         text-decoration: none;
         border-radius: 0.5rem;
@@ -229,7 +229,7 @@
     }
 
     .contact-button:hover {
-        background-color: var(--secondary-theme-color);
+        background-color: var(--muted-foreground);
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
     }

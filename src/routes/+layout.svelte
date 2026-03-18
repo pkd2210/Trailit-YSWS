@@ -5,6 +5,11 @@
 	import AppSidebar from "$lib/components/app-sidebar.svelte";
 	import { IsMobile } from '$lib/hooks/is-mobile.svelte';
 	import Footer from '$lib/components/footer.svelte';
+	import { ModeWatcher } from "mode-watcher";
+	import SunIcon from "@lucide/svelte/icons/sun";
+  	import MoonIcon from "@lucide/svelte/icons/moon";
+ 	import { toggleMode } from "mode-watcher";
+ 	import { Button } from "$lib/components/ui/button/index.js";
 
 	let { children, data } = $props();
 	const isMobile = new IsMobile();
@@ -18,22 +23,27 @@
 {/if}
 <Sidebar.Inset>
 <div
-	style="
-		--background-color: {config['background-color']};
-		--secondary-theme-color: {config['secondary-theme-color']};
-		--theme-color: {config['theme-color']};
-	"
 	class="app-root"
 >
+	<ModeWatcher />
 	{@render children?.()}
 	<Footer />
+	<Button onclick={toggleMode} variant="outline" size="icon" class="fixed bottom-4 right-4 z-50">
+	  <SunIcon
+	    class="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 !transition-all dark:scale-0 dark:-rotate-90"
+	  />
+	  <MoonIcon
+	    class="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 !transition-all dark:scale-100 dark:rotate-0"
+	  />
+	  <span class="sr-only">Toggle theme</span>
+	</Button>
 </div>
 </Sidebar.Inset>
 </Sidebar.Provider>
 <!--End of sidebard-->
 <!--<div class="w-full">
 		<div class="fixed top-4 left-0 right-0 z-50 flex flex-col items-center">
-			<div style="color: {config['theme-color']}; background-color: {config['background-color']}; border: 2px solid {config['secondary-theme-color']};" class="flex flex-wrap items-center justify-center gap-2 px-4 py-2 rounded-lg shadow-lg">
+			<div style="color: var(--foreground); background-color: {config['background-color']}; border: 2px solid var(--muted-foreground);" class="flex flex-wrap items-center justify-center gap-2 px-4 py-2 rounded-lg shadow-lg">
 				{#if data.user}
 				<span>{data.user.first_name} | <a href="{config['url-base']}/logout">Logout</a> | </span>
 				{:else}
@@ -89,7 +99,7 @@
 	:global(.title) {
 		font-size: 3.5rem;
 		font-weight: bold;
-		color: var(--theme-color);
+		color: var(--foreground);
 		margin-bottom: 1rem;
 		text-align: center;
 		font-family: "Phantom Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -97,16 +107,16 @@
 	
 	:global(.subtitle) {
 		font-size: 1.2rem;
-		color: var(--secondary-theme-color);
+		color: var(--muted-foreground);
 		margin-bottom: 2rem;
 	}
 	
 	:global(.theme-demo) {
-		color: var(--theme-color);
+		color: var(--foreground);
 		font-weight: bold;
 	}
 	:global(.login-button) {
-		background-color: var(--theme-color);
+		background-color: var(--foreground);
 		color: white;
 		border: none;
 		padding: 0.75rem 1.5rem;
