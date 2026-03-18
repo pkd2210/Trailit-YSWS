@@ -86,7 +86,7 @@
         window.location.reload();
     }
 </script>
-<div class="card" style="border-color: var(--muted-foreground); background-color: {config['background-color']};">
+<div class="card" style="border-color: var(--muted-foreground); background-color: var(--background-color);">
     {#if item.image}
         <div class="image-container">
             <img src={item.image} alt={item.name} class="item-image" />
@@ -103,7 +103,7 @@
             <div class="action-row">
                 {#if item.type == "grant"}
                     {#if item.price<= data.userTokens}
-                    <button on:click={() => showGrantDialog(item)} style="background-color: var(--foreground); color: {config['background-color']}; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
+                    <button on:click={() => showGrantDialog(item)} style="background-color: var(--foreground); color: var(--background-color); border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
                         Get Grant
                     </button>
                     {:else}
@@ -113,7 +113,7 @@
                     {/if}
                 {:else}
                     {#if item.price<= data.userTokens}
-                    <button  on:click={() => showPurchaseDialog(item)} style="background-color: var(--foreground); color: {config['background-color']}; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
+                    <button  on:click={() => showPurchaseDialog(item)} style="background-color: var(--foreground); color: var(--background-color); border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
                         Buy Now
                     </button>
                     {:else}
