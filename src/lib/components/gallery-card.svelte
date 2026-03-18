@@ -27,7 +27,7 @@
     const screenshot = project['Screenshot'] || '';
 </script>
 
-<div class="gallery-card" style="border-color: var(--muted-foreground); background-color: {config['background-color']};">
+<div class="gallery-card" style="border-color: var(--muted-foreground); background-color: var(--background);">
     <div class="card-header">
         <h2 style="color: var(--foreground);">{project['Product Name'] || 'Untitled'}</h2>
         <span class="hours">{project['Hours']}h</span>
@@ -66,13 +66,13 @@
     <div class="actions">
         {#if project['Code URL']}
             <a href={project['Code URL']} target="_blank" rel="noreferrer"
-               style="background-color: var(--foreground); color: {config['background-color']};">
+               style="background-color: var(--foreground); color: var(--background);">
                 View Code
             </a>
         {/if}
         {#if project['Playable URL']}
             <a href={project['Playable URL']} target="_blank" rel="noreferrer"
-               style="background-color: var(--muted-foreground); color: {config['background-color']};">
+               style="background-color: var(--muted-foreground); color: var(--background);">
                 Try It
             </a>
         {/if}
@@ -168,7 +168,7 @@
     }
 
     .value {
-        color: #ec3750;
+        color: var(--foreground);
         font-size: 0.95rem;
         text-decoration: none;
     }
@@ -177,7 +177,7 @@
         display: flex;
         align-items: center;
         gap: 0.4rem;
-        color: #ec3750;
+        color: var(--foreground);
         font-size: 0.95rem;
         text-decoration: none;
     }

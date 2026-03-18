@@ -60,7 +60,7 @@
         <div class="title">Frequently Asked Questions</div>
         <div class="subtitle">Find answers to common questions about {config["ysws-name"]}</div>
         <div class="text-foreground text-center">By Submitting a Project to this YSW, You agree you will not preform any fraud, In any shape or form in all of HC Services (Including but not limited to this ysws, lapse, and hackatime)</div>
-        <Separator class="my-4" style="background-color: #ec3750;" />
+        <Separator class="my-4" style="background-color: var(--ring);" />
     </section>
 
     <section class="faq-content">
@@ -127,7 +127,7 @@
     .faq-item {
         border: 2px solid var(--muted-foreground);
         border-radius: 0.5rem;
-        background-color: var(--background-color);
+        background-color: var(--background);
         overflow: hidden;
         transition: all 0.3s ease;
     }
@@ -195,7 +195,7 @@
         padding: 2rem;
         border: 2px solid var(--muted-foreground);
         border-radius: 0.5rem;
-        background: linear-gradient(135deg, var(--background-color) 0%, rgba(236, 55, 80, 0.05) 100%);
+        background: linear-gradient(135deg, var(--background) 0%, rgba(236, 55, 80, 0.05) 100%);
     }
 
     .contact-card h3 {
@@ -218,7 +218,7 @@
         justify-content: center;
         padding: 0.75rem 1.5rem;
         background-color: var(--foreground);
-        color: var(--background-color);
+        color: var(--background);
         text-decoration: none;
         border-radius: 0.5rem;
         font-weight: 600;

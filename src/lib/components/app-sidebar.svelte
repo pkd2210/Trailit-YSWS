@@ -131,16 +131,16 @@
 		</a>
 	</Sidebar.Header>
 	<Sidebar.Content>
-		<Separator style="background-color: #ec3750;"/>
+		<Separator style="background-color: var(--ring);"/>
 		<NavMain items={sidebarData.navMain} />
 	</Sidebar.Content>
-	<Separator style="background-color: #ec3750;"/>
+	<Separator style="background-color: var(--ring);"/>
 	<Sidebar.Footer>
 		{#if sidebarData.user}
 			<NavUser user={sidebarData.user} data={data}/>
 		{:else}
 			<div class="px-3 py-2">
-				<a href="{config['url-base']}/api/login" class="text-md text-red-500 hover:underline font-large text-center">Login</a>
+				<a href="{config['url-base']}/api/login" class="text-md text-color-foreground hover:underline font-large text-center">Login</a>
 			</div>
 		{/if}
 	</Sidebar.Footer>

@@ -85,14 +85,14 @@
 
     .category-button:hover {
         background-color: var(--foreground);
-        color: var(--background-color);
+        color: var(--background);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         transform: translateY(-2px);
     }
 
     .category-button.selected {
         background-color: var(--foreground);
-        color: var(--background-color);
+        color: var(--background);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         font-weight: 600;
     }

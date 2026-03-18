@@ -1,6 +1,6 @@
 <!--footer made with <3 by Hack clubbers -->
-<footer class="text-white py-6 opacity-60">
+<footer class="py-6 opacity-80">
 	<div class="container mx-auto text-center">
-		<p>Made with ❤️ by Hack Clubbers</p>
+		<p style="color: var(--credit);">Made with ❤️ by Hack Clubbers</p>
 	</div>
 </footer>

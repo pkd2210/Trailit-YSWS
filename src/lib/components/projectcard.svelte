@@ -32,7 +32,7 @@
     }
 </script>
 
-<div class="project-card" style="border-color: var(--muted-foreground); background-color: {config['background-color']};">
+<div class="project-card" style="border-color: var(--muted-foreground); background-color: {config['background']};">
     <div class="project-header">
         <h2 style="color: var(--foreground);">{getProjectName()}</h2>
         <span class="status {getStatusClass(getStatus())}">{getStatus()}</span>
@@ -54,14 +54,14 @@
     <div class="actions">
         {#if project.fields['Code URL']}
             <a href="{project.fields['Code URL']}" target="_blank" 
-               style="background-color: var(--foreground); color: {config['background-color']}; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.25rem; margin-right: 0.5rem; display: inline-block;">
+               style="background-color: var(--foreground); color: var(--background); text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.25rem; margin-right: 0.5rem; display: inline-block;">
                 View Code
             </a>
         {/if}
         
         {#if project.fields['Playable URL']}
             <a href="{project.fields['Playable URL']}" target="_blank" 
-               style="background-color: var(--muted-foreground); color: {config['background-color']}; text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.25rem; display: inline-block;">
+               style="background-color: var(--muted-foreground); color: var(--background); text-decoration: none; padding: 0.5rem 1rem; border-radius: 0.25rem; display: inline-block;">
                 View Project
             </a>
         {/if}
@@ -155,13 +155,13 @@
     }
     
     .label {
-        color: #6c757d;
+        color: var(--muted-foreground);
         font-size: 0.9rem;
         font-weight: 500;
     }
     
     .value {
-        color: #ec3750;
+        color: var(--foreground);
         font-size: 0.95rem;
         text-align: right;
         flex: 1;
