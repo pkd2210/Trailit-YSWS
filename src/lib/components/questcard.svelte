@@ -49,7 +49,8 @@
     }
 
     function hasPrizeReward() {
-        return getRewardTypes().includes('Order');
+        const rewardTypes = getRewardTypes();
+        return rewardTypes.includes('Order') || rewardTypes.includes('Item');
     }
 
     function getPrizeNames() {

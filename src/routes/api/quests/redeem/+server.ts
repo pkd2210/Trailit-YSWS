@@ -72,7 +72,28 @@ export async function POST({ request, cookies }) {
 
         // Handle different reward types
         const hasTokenReward = rewardTypes?.includes('Tokens');
-        const hasPrizeReward = rewardTypes?.includes('Order');
+        const hasPrizeReward = rewardTypes?.includes('Order') || rewardTypes?.includes('Item');
+        let resolvedPrizeIds: string[] = Array.isArray(prizeIds) ? prizeIds.filter(Boolean) : [];
+
+        if (hasPrizeReward && resolvedPrizeIds.length === 0) {
+            const prizeNames = Array.isArray(quest.fields['name (from Prize)'])
+                ? (quest.fields['name (from Prize)'] as string[])
+                : [];
+
+            if (prizeNames.length > 0) {
+                const itemRecords = await base(process.env.ITEMS_TABLE_ID!).select().all();
+                const itemNameToId = new Map<string, string>();
+
+                itemRecords.forEach((record) => {
+                    const itemName = String(record.get('name') || '').trim().toLowerCase();
+                    if (itemName) itemNameToId.set(itemName, record.id);
+                });
+
+                resolvedPrizeIds = prizeNames
+                    .map((name) => itemNameToId.get(String(name).trim().toLowerCase()) || null)
+                    .filter((id): id is string => Boolean(id));
+            }
+        }
 
         if (hasTokenReward) {
             // Update user's tokens
@@ -85,10 +106,10 @@ export async function POST({ request, cookies }) {
             }]);
         }
 
-        if (hasPrizeReward && prizeIds && prizeIds.length > 0) {
+        if (hasPrizeReward && resolvedPrizeIds.length > 0) {
             // Create orders for each prize item
             const questName = quest.fields['Name'] || `Quest ${quest.id}`;
-            const orderPromises = prizeIds.map(async (prizeId: string, index: number) => {
+            const orderPromises = resolvedPrizeIds.map(async (prizeId: string, index: number) => {
                 const prizeName = quest.fields['name (from Prize)']?.[index] || 'Quest Prize';
                 return base(process.env.ORDERS_TABLE_ID!).create([{
                     fields: {
@@ -125,7 +146,7 @@ export async function POST({ request, cookies }) {
             newTokenBalance: newTokenBalance, 
             rewardTypes: rewardTypes,
             tokensRedeemed: hasTokenReward ? tokenAmount : 0,
-            prizesRedeemed: hasPrizeReward ? prizeIds?.length || 0 : 0
+            prizesRedeemed: hasPrizeReward ? resolvedPrizeIds.length : 0
         });
     } catch (error) {
         console.error('Error in /api/quests/redeem:', error);
