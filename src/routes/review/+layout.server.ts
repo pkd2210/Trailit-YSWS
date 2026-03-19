@@ -4,7 +4,7 @@ import { page } from '$app/stores';
 export const load = async ({ parent, url }) => {
     const data = await parent();
     if (url.pathname !== '/shop') {
-        if (data.user?.Reviewer === false) {
+        if (!data.user || data.user.Reviewer !== true) {
             throw redirect(303, '/api/login');
         }
     }
