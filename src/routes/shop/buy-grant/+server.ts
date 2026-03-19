@@ -1,11 +1,20 @@
 import Airtable from 'airtable';
 
-export async function POST({ request}) {
+export async function POST({ request, cookies }) {
     const body = await request.json();
-    const { item, data, amount } = body;
+    const { item, amount } = body;
+    const itemId = Number(item?.id);
+    const grantAmount = Number(amount);
 
-    if (!data.userRecordId) {
-        return new Response(JSON.stringify({ success: false, message: 'User record ID not found.' }), {
+    if (!Number.isFinite(itemId)) {
+        return new Response(JSON.stringify({ success: false, message: 'Invalid item ID.' }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+
+    if (!Number.isInteger(grantAmount) || grantAmount < 1) {
+        return new Response(JSON.stringify({ success: false, message: 'Invalid grant amount.' }), {
             status: 400,
             headers: { 'Content-Type': 'application/json' }
         });
@@ -14,9 +23,75 @@ export async function POST({ request}) {
     try {
         const base = new Airtable({apiKey: process.env.AIRTABLE_ACCESS_TOKEN}).base(process.env.BASE_ID!);
 
-        const userRecord = await base(process.env.USERS_TABLE_ID!).find(data.userRecordId);
-        const actualUserTokens = userRecord.fields.Tokens as number;
-        const itemPrice = item.price * amount;
+        const access_token = cookies.get('hca_access_token');
+
+        if (!access_token) {
+            return new Response(JSON.stringify({ success: false, message: 'Unauthorized.' }), {
+                status: 401,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        const response = await fetch('https://auth.hackclub.com/api/v1/me', {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        });
+
+        if (!response.ok) {
+            return new Response(JSON.stringify({ success: false, message: 'Unauthorized.' }), {
+                status: 401,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        const userData = await response.json();
+        const userSlackId = userData.identity?.slack_id;
+
+        if (!userSlackId) {
+            return new Response(JSON.stringify({ success: false, message: 'User not found.' }), {
+                status: 404,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        const userRecords = await base(process.env.USERS_TABLE_ID!).select({
+            filterByFormula: `{SlackID} = '${userSlackId}'`
+        }).firstPage();
+
+        if (userRecords.length === 0) {
+            return new Response(JSON.stringify({ success: false, message: 'User record not found.' }), {
+                status: 404,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        const userRecord = userRecords[0];
+        const userRecordId = userRecord.id;
+        const actualUserTokens = Number(userRecord.fields.Tokens) || 0;
+
+        const itemRecords = await base(process.env.ITEMS_TABLE_ID!).select({
+            filterByFormula: `{ID} = ${itemId}`
+        }).firstPage();
+
+        if (itemRecords.length === 0) {
+            return new Response(JSON.stringify({ success: false, message: 'Item not found.' }), {
+                status: 404,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        const itemRecord = itemRecords[0];
+        const unitPrice = Number(itemRecord.fields.price) || 0;
+
+        if (unitPrice <= 0) {
+            return new Response(JSON.stringify({ success: false, message: 'Invalid item price.' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        const itemPrice = unitPrice * grantAmount;
 
         if (actualUserTokens < itemPrice) {
             return new Response(JSON.stringify({ success: false, message: 'Insufficient tokens.' }), {
@@ -24,27 +99,14 @@ export async function POST({ request}) {
                 headers: { 'Content-Type': 'application/json' }
             });
         }
-
-        const itemRecords = await base(process.env.ITEMS_TABLE_ID!).select({
-            filterByFormula: `{ID} = ${item.id}`
-        }).firstPage();
-        
-        if (itemRecords.length === 0) {
-            return new Response(JSON.stringify({ success: false, message: 'Item not found.' }), {
-                status: 404,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        }
-        
-        const itemRecord = itemRecords[0];
         
         await base(process.env.ORDERS_TABLE_ID!).create([
             {
                 fields: {
-                    SlackID: [data.userRecordId],
+                    SlackID: [userRecordId],
                     ItemID: [itemRecord.id],
                     Price: itemPrice,
-                    grantAmount: amount,
+                    grantAmount: grantAmount,
                     OrderDate: new Date().toISOString(),
                     Status: 'Pending'
                 }
@@ -52,7 +114,7 @@ export async function POST({ request}) {
         ]);
         await base(process.env.USERS_TABLE_ID!).update([
             {
-                id: data.userRecordId,
+                id: userRecordId,
                 fields: {
                     Tokens: actualUserTokens - itemPrice
                 }
@@ -66,7 +128,7 @@ export async function POST({ request}) {
             headers: { 'Content-Type': 'application/json' }
         });
     }
-    return new Response(JSON.stringify({ success: true, message: `Item ${item.id} purchased successfully.` }), {
+    return new Response(JSON.stringify({ success: true, message: `Item ${itemId} purchased successfully.` }), {
         headers: { 'Content-Type': 'application/json' }
     });
 }

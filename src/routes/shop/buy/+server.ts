@@ -1,12 +1,13 @@
 import Airtable from 'airtable';
 import { sendLetter, sendOrder } from '$lib/components/autofulfill.server.ts';
 
-export async function POST({ request}) {
+export async function POST({ request, cookies }) {
     const body = await request.json();
     const { item, data } = body;
+    const itemId = Number(item?.id);
 
-    if (!data.userRecordId) {
-        return new Response(JSON.stringify({ success: false, message: 'User record ID not found.' }), {
+    if (!Number.isFinite(itemId)) {
+        return new Response(JSON.stringify({ success: false, message: 'Invalid item ID.' }), {
             status: 400,
             headers: { 'Content-Type': 'application/json' }
         });
@@ -14,19 +15,55 @@ export async function POST({ request}) {
 
     try {
         const base = new Airtable({apiKey: process.env.AIRTABLE_ACCESS_TOKEN}).base(process.env.BASE_ID!);
+        const access_token = cookies.get('hca_access_token');
 
-        const userRecord = await base(process.env.USERS_TABLE_ID!).find(data.userRecordId);
-        const actualUserTokens = userRecord.fields.Tokens as number;
-
-        if (actualUserTokens < item.price) {
-            return new Response(JSON.stringify({ success: false, message: 'Insufficient tokens.' }), {
-                status: 402,
+        if (!access_token) {
+            return new Response(JSON.stringify({ success: false, message: 'Unauthorized.' }), {
+                status: 401,
                 headers: { 'Content-Type': 'application/json' }
             });
         }
 
+        const response = await fetch('https://auth.hackclub.com/api/v1/me', {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        });
+
+        if (!response.ok) {
+            return new Response(JSON.stringify({ success: false, message: 'Unauthorized.' }), {
+                status: 401,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        const userData = await response.json();
+        const userSlackId = userData.identity?.slack_id;
+
+        if (!userSlackId) {
+            return new Response(JSON.stringify({ success: false, message: 'User not found.' }), {
+                status: 404,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        const userRecords = await base(process.env.USERS_TABLE_ID!).select({
+            filterByFormula: `{SlackID} = '${userSlackId}'`
+        }).firstPage();
+
+        if (userRecords.length === 0) {
+            return new Response(JSON.stringify({ success: false, message: 'User record not found.' }), {
+                status: 404,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        const userRecord = userRecords[0];
+        const userRecordId = userRecord.id;
+        const actualUserTokens = Number(userRecord.fields.Tokens) || 0;
+
         const itemRecords = await base(process.env.ITEMS_TABLE_ID!).select({
-            filterByFormula: `{ID} = ${item.id}`
+            filterByFormula: `{ID} = ${itemId}`
         }).firstPage();
         
         if (itemRecords.length === 0) {
@@ -37,10 +74,18 @@ export async function POST({ request}) {
         }
         
         const itemRecord = itemRecords[0];
+        const itemPrice = Number(itemRecord.fields.price) || 0;
         
-        if (itemRecord.fields.price !== item.price) {
-            return new Response(JSON.stringify({ success: false, message: 'Item price mismatch.' }), {
+        if (itemPrice <= 0) {
+            return new Response(JSON.stringify({ success: false, message: 'Invalid item price.' }), {
                 status: 400,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        if (actualUserTokens < itemPrice) {
+            return new Response(JSON.stringify({ success: false, message: 'Insufficient tokens.' }), {
+                status: 402,
                 headers: { 'Content-Type': 'application/json' }
             });
         }
@@ -48,9 +93,9 @@ export async function POST({ request}) {
         await base(process.env.ORDERS_TABLE_ID!).create([
             {
                 fields: {
-                    SlackID: [data.userRecordId],
+                    SlackID: [userRecordId],
                     ItemID: [itemRecord.id],
-                    Price: itemRecord.fields.price,
+                    Price: itemPrice,
                     OrderDate: new Date().toISOString(),
                     Status: 'Pending'
                 }
@@ -58,9 +103,9 @@ export async function POST({ request}) {
         ]);
         await base(process.env.USERS_TABLE_ID!).update([
             {
-                id: data.userRecordId,
+                id: userRecordId,
                 fields: {
-                    Tokens: actualUserTokens - item.price
+                    Tokens: actualUserTokens - itemPrice
                 }
             }
         ]);
