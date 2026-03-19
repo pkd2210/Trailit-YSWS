@@ -1,6 +1,8 @@
 import Airtable from 'airtable';
 import { sendLetter, sendOrder } from '$lib/components/autofulfill.server.ts';
 
+const inFlightPurchases = new Set<string>();
+
 export async function POST({ request, cookies }) {
     const body = await request.json();
     const { item, data } = body;
@@ -60,91 +62,105 @@ export async function POST({ request, cookies }) {
 
         const userRecord = userRecords[0];
         const userRecordId = userRecord.id;
-        const actualUserTokens = Number(userRecord.fields.Tokens) || 0;
 
-        const itemRecords = await base(process.env.ITEMS_TABLE_ID!).select({
-            filterByFormula: `{ID} = ${itemId}`
-        }).firstPage();
-        
-        if (itemRecords.length === 0) {
-            return new Response(JSON.stringify({ success: false, message: 'Item not found.' }), {
-                status: 404,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        }
-        
-        const itemRecord = itemRecords[0];
-        const itemPrice = Number(itemRecord.fields.price) || 0;
-        
-        if (itemPrice <= 0) {
-            return new Response(JSON.stringify({ success: false, message: 'Invalid item price.' }), {
-                status: 400,
+        if (inFlightPurchases.has(userRecordId)) {
+            return new Response(JSON.stringify({ success: false, message: 'Order already processing. Please wait.' }), {
+                status: 429,
                 headers: { 'Content-Type': 'application/json' }
             });
         }
 
-        if (actualUserTokens < itemPrice) {
-            return new Response(JSON.stringify({ success: false, message: 'Insufficient tokens.' }), {
-                status: 402,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        }
+        inFlightPurchases.add(userRecordId);
 
-        await base(process.env.ORDERS_TABLE_ID!).create([
-            {
-                fields: {
-                    SlackID: [userRecordId],
-                    ItemID: [itemRecord.id],
-                    Price: itemPrice,
-                    OrderDate: new Date().toISOString(),
-                    Status: 'Pending'
-                }
-            }
-        ]);
-        await base(process.env.USERS_TABLE_ID!).update([
-            {
-                id: userRecordId,
-                fields: {
-                    Tokens: actualUserTokens - itemPrice
-                }
-            }
-        ]);
+        try {
+            const actualUserTokens = Number(userRecord.fields.Tokens) || 0;
 
-        // Handle letter fulfillment if this is a letter item
-        if (item.type === 'letter' && data.letterData) {
-                const letterResult = await sendLetter({
-                    first_name: "To add",
-                    last_name: "To add",
-                    address_line_1: "To add",
-                    address_line_2: "To add",
-                    city: "To add",
-                    state: "To add",
-                    postal_code: "To add",
-                    country: "To add",
-                    recipient_email: "To add",
-                    mail_type: "To add",
-                    weight_grams: "To add",
-                    rubber_stamps: "To add",
-                    notes: "To add"
+            const itemRecords = await base(process.env.ITEMS_TABLE_ID!).select({
+                filterByFormula: `{ID} = ${itemId}`
+            }).firstPage();
+            
+            if (itemRecords.length === 0) {
+                return new Response(JSON.stringify({ success: false, message: 'Item not found.' }), {
+                    status: 404,
+                    headers: { 'Content-Type': 'application/json' }
                 });
-        }
-
-        // Handle order fulfillment if this is an order item
-        if (item.type === 'package' && data.orderData) {
-                const orderResult = await sendOrder({
-                    order_text: "To add",
-                    first_name: "To add",
-                    last_name: "To add",
-                    email: "To add",
-                    phone_number: "To add",
-                    address_line_1: "To add",
-                    address_line_2: "To add",
-                    city: "To add",
-                    state: "To add",
-                    postal_code: "To add",
-                    country: "To add",
-                    order_notes: "To add"
+            }
+            
+            const itemRecord = itemRecords[0];
+            const itemPrice = Number(itemRecord.fields.price) || 0;
+            
+            if (itemPrice <= 0) {
+                return new Response(JSON.stringify({ success: false, message: 'Invalid item price.' }), {
+                    status: 400,
+                    headers: { 'Content-Type': 'application/json' }
                 });
+            }
+
+            if (actualUserTokens < itemPrice) {
+                return new Response(JSON.stringify({ success: false, message: 'Insufficient tokens.' }), {
+                    status: 402,
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            }
+
+            await base(process.env.ORDERS_TABLE_ID!).create([
+                {
+                    fields: {
+                        SlackID: [userRecordId],
+                        ItemID: [itemRecord.id],
+                        Price: itemPrice,
+                        OrderDate: new Date().toISOString(),
+                        Status: 'Pending'
+                    }
+                }
+            ]);
+            await base(process.env.USERS_TABLE_ID!).update([
+                {
+                    id: userRecordId,
+                    fields: {
+                        Tokens: actualUserTokens - itemPrice
+                    }
+                }
+            ]);
+
+            // Handle letter fulfillment if this is a letter item
+            if (item.type === 'letter' && data.letterData) {
+                    const letterResult = await sendLetter({
+                        first_name: "To add",
+                        last_name: "To add",
+                        address_line_1: "To add",
+                        address_line_2: "To add",
+                        city: "To add",
+                        state: "To add",
+                        postal_code: "To add",
+                        country: "To add",
+                        recipient_email: "To add",
+                        mail_type: "To add",
+                        weight_grams: "To add",
+                        rubber_stamps: "To add",
+                        notes: "To add"
+                    });
+            }
+
+            // Handle order fulfillment if this is an order item
+            if (item.type === 'package' && data.orderData) {
+                    const orderResult = await sendOrder({
+                        order_text: "To add",
+                        first_name: "To add",
+                        last_name: "To add",
+                        email: "To add",
+                        phone_number: "To add",
+                        address_line_1: "To add",
+                        address_line_2: "To add",
+                        city: "To add",
+                        state: "To add",
+                        postal_code: "To add",
+                        country: "To add",
+                        order_notes: "To add"
+                    });
+            }
+        } finally {
+            inFlightPurchases.delete(userRecordId);
         }
 
     } catch (error) {

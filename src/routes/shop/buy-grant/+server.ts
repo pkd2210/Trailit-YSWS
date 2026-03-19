@@ -1,5 +1,7 @@
 import Airtable from 'airtable';
 
+const inFlightPurchases = new Set<string>();
+
 export async function POST({ request, cookies }) {
     const body = await request.json();
     const { item, amount } = body;
@@ -68,58 +70,72 @@ export async function POST({ request, cookies }) {
 
         const userRecord = userRecords[0];
         const userRecordId = userRecord.id;
-        const actualUserTokens = Number(userRecord.fields.Tokens) || 0;
 
-        const itemRecords = await base(process.env.ITEMS_TABLE_ID!).select({
-            filterByFormula: `{ID} = ${itemId}`
-        }).firstPage();
-
-        if (itemRecords.length === 0) {
-            return new Response(JSON.stringify({ success: false, message: 'Item not found.' }), {
-                status: 404,
+        if (inFlightPurchases.has(userRecordId)) {
+            return new Response(JSON.stringify({ success: false, message: 'Order already processing. Please wait.' }), {
+                status: 429,
                 headers: { 'Content-Type': 'application/json' }
             });
         }
 
-        const itemRecord = itemRecords[0];
-        const unitPrice = Number(itemRecord.fields.price) || 0;
+        inFlightPurchases.add(userRecordId);
 
-        if (unitPrice <= 0) {
-            return new Response(JSON.stringify({ success: false, message: 'Invalid item price.' }), {
-                status: 400,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        }
+        try {
+            const actualUserTokens = Number(userRecord.fields.Tokens) || 0;
 
-        const itemPrice = unitPrice * grantAmount;
+            const itemRecords = await base(process.env.ITEMS_TABLE_ID!).select({
+                filterByFormula: `{ID} = ${itemId}`
+            }).firstPage();
 
-        if (actualUserTokens < itemPrice) {
-            return new Response(JSON.stringify({ success: false, message: 'Insufficient tokens.' }), {
-                status: 402,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        }
-        
-        await base(process.env.ORDERS_TABLE_ID!).create([
-            {
-                fields: {
-                    SlackID: [userRecordId],
-                    ItemID: [itemRecord.id],
-                    Price: itemPrice,
-                    grantAmount: grantAmount,
-                    OrderDate: new Date().toISOString(),
-                    Status: 'Pending'
-                }
+            if (itemRecords.length === 0) {
+                return new Response(JSON.stringify({ success: false, message: 'Item not found.' }), {
+                    status: 404,
+                    headers: { 'Content-Type': 'application/json' }
+                });
             }
-        ]);
-        await base(process.env.USERS_TABLE_ID!).update([
-            {
-                id: userRecordId,
-                fields: {
-                    Tokens: actualUserTokens - itemPrice
-                }
+
+            const itemRecord = itemRecords[0];
+            const unitPrice = Number(itemRecord.fields.price) || 0;
+
+            if (unitPrice <= 0) {
+                return new Response(JSON.stringify({ success: false, message: 'Invalid item price.' }), {
+                    status: 400,
+                    headers: { 'Content-Type': 'application/json' }
+                });
             }
-        ]);
+
+            const itemPrice = unitPrice * grantAmount;
+
+            if (actualUserTokens < itemPrice) {
+                return new Response(JSON.stringify({ success: false, message: 'Insufficient tokens.' }), {
+                    status: 402,
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            }
+            
+            await base(process.env.ORDERS_TABLE_ID!).create([
+                {
+                    fields: {
+                        SlackID: [userRecordId],
+                        ItemID: [itemRecord.id],
+                        Price: itemPrice,
+                        grantAmount: grantAmount,
+                        OrderDate: new Date().toISOString(),
+                        Status: 'Pending'
+                    }
+                }
+            ]);
+            await base(process.env.USERS_TABLE_ID!).update([
+                {
+                    id: userRecordId,
+                    fields: {
+                        Tokens: actualUserTokens - itemPrice
+                    }
+                }
+            ]);
+        } finally {
+            inFlightPurchases.delete(userRecordId);
+        }
 
     } catch (error) {
         console.error('Error creating order:', error);
